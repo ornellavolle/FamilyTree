@@ -78,6 +78,11 @@ PERSONS = {
     33 : {"name": "Josephine Piponnier",             "birth": "02/12/1894",           "death": "10/03/1988", "place": "Lyon, France",    "gender" : "f"},
     34 : {"name": "Josephine Martinez",             "birth": "",           "death": "", "place": "",    "gender"    : "f"},
     35 : {"name": "Armand Martinez",             "birth": "",           "death": "", "place": "",    "gender"    : "m"},
+    36 : {"name": "Agnes Volle",             "birth": "",           "death": "", "place": "",    "gender"    : "f"},
+    37 : {"name": "Marcel Volle",             "birth": "",           "death": "", "place": "",    "gender"    : "m"},
+    38 : {"name": "Jean Volle",             "birth": "",           "death": "", "place": "",    "gender"    : "m"},
+    39 : {"name": "Isabelle Volle",             "birth": "",           "death": "", "place": "",    "gender"    : "f"},
+    40 : {"name": "Jean-Nöel Volle",             "birth": "",           "death": "", "place": "",    "gender"    : "m"},
 }
 
 FILIATIONS = [
@@ -89,6 +94,7 @@ FILIATIONS = [
     (22,4), (23,4), (20,24), 
     (19,24), (20,25), (19,25), (20,26), (19,26), (18,27), (18, 28),
     (29,9), (30,9), (17,34), (17,35),
+    (36,39), (37,39), (36,40), (37,40),(36,20), (37,20),
 ]
 
 UNIONS = {
@@ -100,6 +106,7 @@ UNIONS = {
     "14-16": {"a": 14, "b": 16, "date": "ca. 1970"},
     "19-20": {"a": 19, "b": 20, "date": "ca. 2000"},
     "22-23": {"a": 22, "b": 23, "date": ""},
+    "36-37": {"a": 36, "b": 37, "date": ""},
 }
 
 ROLE_STYLES = {
@@ -354,8 +361,8 @@ const ROWS=[
   {y:40+(ROW_H+ROW_GAP)*2, ids:[4,3,  29,30]},
   {y:40+(ROW_H+ROW_GAP)*3, ids:[5,6,7,31,32,33,10,21,11,8,9]},
   {y:40+(ROW_H+ROW_GAP)*4, ids:[13,12]},
-  {y:40+(ROW_H+ROW_GAP)*5, ids:[16,14,15]},
-  {y:40+(ROW_H+ROW_GAP)*6, ids:[17,18,19,20]},
+  {y:40+(ROW_H+ROW_GAP)*5, ids:[16,14,15, 36, 37]},
+  {y:40+(ROW_H+ROW_GAP)*6, ids:[17,18,19,20,39,40]},
   {y:40+(ROW_H+ROW_GAP)*7, ids:[34,35,27,28,24,25,26]},
 ];
 
