@@ -47,7 +47,7 @@ PERSONS = {
     2:  {"name": "Claudine Varnois",          "birth": "",           "death": "",           "place": "",         "gender": "f"},
     3:  {"name": "Jean Claude Piponnier",     "birth": "02/08/1847", "death": "",           "place": "Catheniére commune de Simandre", "gender": "m"},
     4:  {"name": "Marie Catherine Laurent",   "birth": "05/03/1858", "death": "",           "place": "",         "gender": "f"},
-    5:  {"name": "Jean Claude Piponnier",     "birth": "02/08/1847", "death": "",           "place": "",         "gender": "m"},
+    5:  {"name": "Jean Claude Piponnier",     "birth": "09/01/1879", "death": "4/10/1918",           "place": "Saint-Quentin, 02691, Aisne, Picardie, France",         "gender": "m"},
     6:  {"name": "Louise Piponnier",          "birth": "10/04/1884", "death": "après 1936",           "place": "Gigny-sur-Saône, 71219, Saône-et-Loire, Bourgogne, France",         "gender": "f"},
     7:  {"name": "Marie Piponnier",           "birth": "10/10/1885", "death": "",           "place": "",         "gender": "f"},
     8:  {"name": "Jean Marie Piponnier",      "birth": "30/10/1887", "death": "25/03/1977", "place": "Cuisery, France",         "gender": "m"},
