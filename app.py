@@ -64,8 +64,8 @@ PERSONS = {
     19: {"name": "Sandrine El raiani",       "birth": "02/08/1973", "death": "",           "place": "",         "gender": "f"},
     20: {"name": "Régis Volle",               "birth": "23/03/1977", "death": "",           "place": "",         "gender": "m"},
     21: {"name": "Jeanne Marie DuBuisson",    "birth": "",           "death": "",           "place": "",         "gender": "f"},
-    22 : {"name": "Jean Laurent",                "birth": "",           "death": "",           "place": "", "gender": "m"},
-    23 : {"name": "Anne Viennois",             "birth": "",           "death": "",         "place": "", "gender" : "f"},
+    22 : {"name": "Jean Laurent",                "birth": "1830",           "death": "",           "place": "", "gender": "m"},
+    23 : {"name": "Anne Viennois",             "birth": "1831",           "death": "",         "place": "", "gender" : "f"},
     24 : {"name": "Ornella Volle",             "birth": "29/12/2003",           "death": "",  "place": "", "gender" : "f"},
     25 : {"name": "Théotime Volle",             "birth": "23/08/2005",           "death": "",  "place": "", "gender" : "m"}, 
     26 : {"name": "Ombeline Volle",             "birth": "30/09/2007",           "death": "", "place": "", "gender" : "f"},
@@ -83,6 +83,7 @@ PERSONS = {
     38 : {"name": "Jean Volle",             "birth": "",           "death": "", "place": "",    "gender"    : "m"},
     39 : {"name": "Isabelle Volle",             "birth": "",           "death": "", "place": "",    "gender"    : "f"},
     40 : {"name": "Jean-Nöel Volle",             "birth": "",           "death": "", "place": "",    "gender"    : "m"},
+    41 : {"name": "Marie Claudine Laurent",             "birth": "01/07/1869",           "death": "", "place": "",    "gender"    : "f"},
 }
 
 FILIATIONS = [
@@ -95,6 +96,7 @@ FILIATIONS = [
     (19,24), (20,25), (19,25), (20,26), (19,26), (18,27), (18, 28),
     (29,9), (30,9), (17,34), (17,35),
     (36,39), (37,39), (36,40), (37,40),(36,20), (37,20),
+    (22,41), (23,41),
 ]
 
 UNIONS = {
