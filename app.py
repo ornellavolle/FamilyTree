@@ -31,7 +31,7 @@ PERSONS = {
     5:  {"name": "Jean Claude Piponnier",     "birth": "09/07/1876", "death": "",           "place": "",         "gender": "m"},
     6:  {"name": "Louise Piponnier",          "birth": "10/04/1884", "death": "",           "place": "",         "gender": "f"},
     7:  {"name": "Marie Piponnier",           "birth": "10/10/1885", "death": "",           "place": "",         "gender": "f"},
-    8:  {"name": "Jean Marie Piponnier",      "birth": "30/10/1887", "death": "25/03/1977", "place": "",         "gender": "m"},
+    8:  {"name": "Jean Marie Piponnier",      "birth": "30/10/188", "death": "",           "place": "",         "gender": "m"},
     9:  {"name": "Henriette Morin",           "birth": "",           "death": "",           "place": "",         "gender": "f"},
     10: {"name": "Francis Piponnier",         "birth": "30/08/1890", "death": "",           "place": "",         "gender": "m"},
     11: {"name": "Marguerite Piponnier",      "birth": "18/09/1895", "death": "",           "place": "",         "gender": "f"},
@@ -45,7 +45,6 @@ PERSONS = {
     19: {"name": "Sandrine El raiani",       "birth": "02/08/1973", "death": "",           "place": "",         "gender": "f"},
     20: {"name": "Régis Volle",               "birth": "23/03/1977", "death": "",           "place": "",         "gender": "m"},
     21: {"name": "Jeanne Marie DuBuisson",    "birth": "",           "death": "",           "place": "",         "gender": "f"},
-    22 : {"name": "Anne Viennois",               "birth": "",           "death": "",           "place": "", "gender": "f"},
 }
 
 FILIATIONS = [
