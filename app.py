@@ -216,7 +216,7 @@ if "story" not in st.session_state:
 
 # ─── SIDEBAR ──────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("## 🌳 Famille Piponnier")
+    st.markdown("##")
     st.markdown(
         "<p style='font-size:12px;color:#AAA;margin-top:-10px;'>6 générations · 21 membres</p>",
         unsafe_allow_html=True,
