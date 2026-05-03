@@ -9,10 +9,11 @@ Installation : pip install streamlit anthropic
 import streamlit as st
 import anthropic
 import json
+import base64
 
 st.set_page_config(
     page_title="Arbre Généalogique",
-    page_icon="",
+    page_icon="🌳",
     layout="wide",
 )
 
@@ -37,6 +38,8 @@ h1 { font-family:'Playfair Display',serif!important; font-weight:400!important; 
 .detail-sect   { font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#999; margin:10px 0 5px; }
 .rel-tag       { font-size:10px; color:#999; background:#F3F4F6; padding:1px 6px; border-radius:10px; }
 .story-area    { background:#FAF8F5; border:1px solid #E8E5E0; border-radius:8px; padding:14px; margin-top:10px; font-size:13px; color:#444; line-height:1.8; }
+.pdf-badge     { display:inline-flex; align-items:center; gap:5px; background:#EFF6FF; border:1px solid #BFDBFE; border-radius:6px; padding:3px 8px; font-size:11px; color:#1D4ED8; margin-top:6px; }
+.pdf-badge-none{ display:inline-flex; align-items:center; gap:5px; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:6px; padding:3px 8px; font-size:11px; color:#9CA3AF; margin-top:6px; }
 hr             { border:none; border-top:1px solid #EEE; margin:1rem 0; }
 </style>
 """, unsafe_allow_html=True)
@@ -45,7 +48,7 @@ hr             { border:none; border-top:1px solid #EEE; margin:1rem 0; }
 PERSONS = {
     1:  {"name": "François Piponnier",       "birth": "",           "death": "28/01/1870", "place": "Simandre", "gender": "m"},
     2:  {"name": "Claudine Varnois",          "birth": "",           "death": "",           "place": "",         "gender": "f"},
-    3:  {"name": "Jean Claude Piponnier",     "birth": "02/08/1847", "death": "",           "place": "Catheniére commune de Simandre", "gender": "m"},
+    3:  {"name": "Jean Claude Piponnier",     "birth": "03/08/1847", "death": "",           "place": "Simandre", "gender": "m"},
     4:  {"name": "Marie Catherine Laurent",   "birth": "05/03/1839", "death": "",           "place": "",         "gender": "f"},
     5:  {"name": "Jean Claude Piponnier",     "birth": "09/07/1876", "death": "",           "place": "",         "gender": "m"},
     6:  {"name": "Louise Piponnier",          "birth": "10/04/1884", "death": "",           "place": "",         "gender": "f"},
@@ -64,8 +67,6 @@ PERSONS = {
     19: {"name": "Barchive El ralenti",       "birth": "02/05/1972", "death": "",           "place": "",         "gender": "f"},
     20: {"name": "Régis Volle",               "birth": "23/03/1977", "death": "",           "place": "",         "gender": "m"},
     21: {"name": "Jeanne Marie DuBuisson",    "birth": "",           "death": "",           "place": "",         "gender": "f"},
-    22 : {"name": "Jean Laurent",                "birth": "",           "death": "",           "place": "", "gender": "m"},
-    23 : {"name": "Anne Viennois",             "birth": "",           "death": "",         "place": "", "gender" : "f"},
 }
 
 FILIATIONS = [
@@ -73,18 +74,17 @@ FILIATIONS = [
     (3,5),(4,5),(3,6),(4,6),(3,7),(4,7),(3,8),(4,8),(3,10),(4,10),(3,11),(4,11),
     (8,12),(9,12),
     (12,14),(13,14),(12,15),(13,15),
-    (14,17),(16,17),(14,18),(16,18),(14,19),(16,19), (22, 23),
+    (14,17),(16,17),(14,18),(16,18),(14,19),(16,19),
 ]
 
 UNIONS = {
     "1-2":   {"a": 1,  "b": 2,  "date": ""},
-    "3-4":   {"a": 3,  "b": 4,  "date": "mariage le 28/02/1878"},
+    "3-4":   {"a": 3,  "b": 4,  "date": "ca. 1875"},
     "8-9":   {"a": 8,  "b": 9,  "date": ""},
     "10-21": {"a": 10, "b": 21, "date": ""},
     "12-13": {"a": 12, "b": 13, "date": ""},
     "14-16": {"a": 14, "b": 16, "date": "ca. 1970"},
     "19-20": {"a": 19, "b": 20, "date": "ca. 2000"},
-    "22-23": {"a": 22, "b": 23, "date": ""},
 }
 
 ROLE_STYLES = {
@@ -216,10 +216,13 @@ if "view_all" not in st.session_state:
     st.session_state.view_all = False
 if "story" not in st.session_state:
     st.session_state.story = {}
+# Stockage des PDFs : {person_id: [{"name": str, "data": bytes}, ...]}
+if "pdfs" not in st.session_state:
+    st.session_state.pdfs = {}
 
 # ─── SIDEBAR ──────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("## Arbre Généalogique")
+    st.markdown("## 🌳 Arbre Généalogique")
     st.markdown(
         "<p style='font-size:12px;color:#AAA;margin-top:-10px;'>6 générations · 21 membres</p>",
         unsafe_allow_html=True,
@@ -227,7 +230,7 @@ with st.sidebar:
     st.markdown("---")
 
     if st.button(
-        "🌐 Voir tout l'arbre" if not st.session_state.view_all else "Vue individuelle",
+        "🌐 Voir tout l'arbre" if not st.session_state.view_all else "👤 Vue individuelle",
         use_container_width=True,
     ):
         st.session_state.view_all = not st.session_state.view_all
@@ -293,7 +296,7 @@ with st.sidebar:
             unsafe_allow_html=True,
         )
 
-# ─── PRÉPARER LES JSON POUR LE JS (évite les conflits d'accolades dans les f-strings) ───
+# ─── PRÉPARER LES JSON POUR LE JS ─────────────────────────────────────────────
 persons_json    = json.dumps(PERSONS)
 filiations_list = [[p, c] for p, c in FILIATIONS]
 filiations_json = json.dumps(filiations_list)
@@ -526,7 +529,7 @@ window.addEventListener('mouseup',()=>isDrag=false);
 </script>
 """
 
-st.markdown("# Arbre Généalogique")
+st.markdown("# 🌳 Arbre Généalogique · Famille Piponnier")
 st.components.v1.html(tree_html, height=700, scrolling=False)
 
 # ─── PANNEAU DE DÉTAIL ────────────────────────────────────────────────────────
@@ -534,7 +537,7 @@ st.markdown("---")
 col1, col2 = st.columns([1, 2])
 
 with col1:
-    st.markdown("### Renseignement de la Personne")
+    st.markdown("### 👤 Renseignements")
     sorted_names_detail = sorted(PERSONS.items(), key=lambda x: x[1]["name"])
     options_detail = {v["name"]: k for k, v in sorted_names_detail}
     detail_name = st.selectbox(
@@ -588,13 +591,83 @@ with col1:
     if rel_html:
         st.markdown(f"<div class='detail-card'>{rel_html}</div>", unsafe_allow_html=True)
 
+    # ─── SECTION PDF ──────────────────────────────────────────────────────────
     st.markdown("---")
+    st.markdown("#### 📎 Documents PDF")
+
+    person_pdfs = st.session_state.pdfs.get(detail_id, [])
+    n_pdfs = len(person_pdfs)
+
+    if n_pdfs == 0:
+        st.markdown(
+            "<span class='pdf-badge-none'>📄 Aucun document associé</span>",
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(
+            f"<span class='pdf-badge'>📄 {n_pdfs} document{'s' if n_pdfs > 1 else ''} associé{'s' if n_pdfs > 1 else ''}</span>",
+            unsafe_allow_html=True,
+        )
+
+    uploaded_pdf = st.file_uploader(
+        "Ajouter un document PDF",
+        type=["pdf"],
+        key=f"pdf_upload_{detail_id}",
+        label_visibility="collapsed",
+        help="Actes de naissance, mariage, décès, photos numérisées…",
+    )
+    if uploaded_pdf is not None:
+        pdf_bytes = uploaded_pdf.read()
+        existing_names = [p["name"] for p in st.session_state.pdfs.get(detail_id, [])]
+        if uploaded_pdf.name not in existing_names:
+            if detail_id not in st.session_state.pdfs:
+                st.session_state.pdfs[detail_id] = []
+            st.session_state.pdfs[detail_id].append({
+                "name": uploaded_pdf.name,
+                "data": pdf_bytes,
+            })
+            st.success(f"✅ « {uploaded_pdf.name} » ajouté !")
+            st.rerun()
+        else:
+            st.info(f"ℹ️ « {uploaded_pdf.name} » est déjà associé à cette personne.")
+
+    st.markdown("---")
+
     if st.button("✍️ Générer le récit de vie", use_container_width=True, key="story_btn"):
         with st.spinner("Génération du récit en cours…"):
             story_text = generate_story(detail_id)
             st.session_state.story[detail_id] = story_text
 
 with col2:
+    # ─── DOCUMENTS PDF (visionneuse) ──────────────────────────────────────────
+    person_pdfs = st.session_state.pdfs.get(detail_id, [])
+
+    if person_pdfs:
+        st.markdown("### 📄 Documents associés")
+        for idx, pdf_entry in enumerate(person_pdfs):
+            col_label, col_del = st.columns([5, 1])
+            with col_del:
+                if st.button("🗑️", key=f"del_pdf_{detail_id}_{idx}", help="Supprimer ce document"):
+                    st.session_state.pdfs[detail_id].pop(idx)
+                    st.rerun()
+
+            with st.expander(f"📄 {pdf_entry['name']}", expanded=(idx == 0 and len(person_pdfs) == 1)):
+                b64 = base64.b64encode(pdf_entry["data"]).decode()
+                pdf_html = (
+                    f'<iframe src="data:application/pdf;base64,{b64}" '
+                    f'width="100%" height="520px" style="border:1px solid #E8E5E0;border-radius:8px;"></iframe>'
+                )
+                st.markdown(pdf_html, unsafe_allow_html=True)
+                st.download_button(
+                    label="⬇️ Télécharger",
+                    data=pdf_entry["data"],
+                    file_name=pdf_entry["name"],
+                    mime="application/pdf",
+                    key=f"dl_pdf_{detail_id}_{idx}",
+                )
+        st.markdown("---")
+
+    # ─── RÉCIT DE VIE ─────────────────────────────────────────────────────────
     st.markdown("### 📖 Récit de vie")
     if detail_id in st.session_state.story:
         paragraphs = st.session_state.story[detail_id].strip().split("\n")
