@@ -327,8 +327,7 @@ tree_html = f"""
 <script>
 const P={json.dumps(PERSONS)};
 const FILIATIONS={json.dumps([[p,c] for p,c in FILIATIONS])};
-const UNIONS={json.dumps({{k:{{"a":v["a"],"b":v["b"],"date":v["date"]}} for k,v in UNIONS.items()}})};
-const ROLE_STYLES={json.dumps(ROLE_STYLES)};
+const UNIONS = {{unions_json}};const ROLE_STYLES={json.dumps(ROLE_STYLES)};
 const SEL_ID={selected_id};
 const VIEW_ALL={view_all_js};
 
