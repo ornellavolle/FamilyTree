@@ -94,6 +94,8 @@ PERSONS = {
     50 : {"name": "Henri Guerin",       "birth": "", "death": "", "place": "", "gender": "m"},
     51 : {"name": "Claude-Marie Boumont (ou Benoit)",       "birth": "", "death": "", "place": "", "gender": "m"},
     52 : {"name": "René Piponnier",       "birth": "05/05/1920", "death": "03/01/2000", "place": "Millery, 69133, Rhône, Rhône-Alpes, France", "gender": "m"},
+    53 : {"name": "Inconnu(e)",       "birth": "", "death": "", "place": "", "gender": ""},
+    54 : {"name": "Inconnu(e)",       "birth": "", "death": "", "place": "", "gender": ""},
 }   
 
 FILIATIONS = [
@@ -107,7 +109,7 @@ FILIATIONS = [
     (29,9), (30,9), (17,34), (17,35),
     (36,39), (37,39), (36,40), (37,40),(36,20), (37,20),
     (22,41), (23,41),(22,42), (23,42),(22,43), (23,43),(22,45), (23,45),(22,46), (23,46),(22,48), (23,48),
-    (6,49), (48,49), (10,52), (21,52),
+    (6,49), (48,49), (10,52), (21,52),(10,53), (21,53),(10,54), (21,54),
 ]
 
 UNIONS = {
@@ -376,7 +378,7 @@ const ROWS=[
   {y:40+(ROW_H+ROW_GAP)*1, ids:[23,22,2,1]}, 
   {y:40+(ROW_H+ROW_GAP)*2, ids:[42,43,45,46,48,41, 4,3,  29,30]},
   {y:40+(ROW_H+ROW_GAP)*3, ids:[5,6,48,7,51,31,32,33,10,21,11,8,9]},
-  {y:40+(ROW_H+ROW_GAP)*4, ids:[50,49,13,12, 52]},
+  {y:40+(ROW_H+ROW_GAP)*4, ids:[50,53,54,49,13,12, 52]},
   {y:40+(ROW_H+ROW_GAP)*5, ids:[16,14,15, 36, 37]},
   {y:40+(ROW_H+ROW_GAP)*6, ids:[17,18,19,20,39,40]},
   {y:40+(ROW_H+ROW_GAP)*7, ids:[34,35,27,28,24,25,26]},
