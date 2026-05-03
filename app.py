@@ -2,7 +2,7 @@ import streamlit as st
 import plotly.graph_objects as go
 
 st.set_page_config(
-    page_title="Arbre Généalogique · Famille Piponnier",
+    page_title="Arbre Généalogique",
     page_icon="🌳",
     layout="wide",
 )
@@ -24,27 +24,28 @@ hr { border: none; border-top: 1px solid #EEE; margin: 1rem 0; }
 
 # ── DONNÉES ───────────────────────────────────────────────────────────────────
 PERSONS = {
-    1:  {"name": "François Piponnier",       "birth": "",           "death": "28/01/1870", "place": "Simandre", "gender": "m"},
-    2:  {"name": "Claudine Varnois",          "birth": "",           "death": "",           "place": "",         "gender": "f"},
-    3:  {"name": "Jean Claude Piponnier",     "birth": "03/08/1847", "death": "",           "place": "Simandre", "gender": "m"},
+    1:  {"name": "François Piponnier",       "birth": "",           "death": "29/01/1870", "place": "Simandre", "gender": "m"},
+    2:  {"name": "Claudine Viennois",         "birth": "",           "death": "",           "place": "",         "gender": "f"},
+    3:  {"name": "Jean Claude Piponnier",     "birth": "02/08/1847", "death": "",           "place": "Simandre", "gender": "m"},
     4:  {"name": "Marie Catherine Laurent",   "birth": "05/03/1839", "death": "",           "place": "",         "gender": "f"},
     5:  {"name": "Jean Claude Piponnier",     "birth": "09/07/1876", "death": "",           "place": "",         "gender": "m"},
     6:  {"name": "Louise Piponnier",          "birth": "10/04/1884", "death": "",           "place": "",         "gender": "f"},
     7:  {"name": "Marie Piponnier",           "birth": "10/10/1885", "death": "",           "place": "",         "gender": "f"},
-    8:  {"name": "Jean Marie Piponnier",      "birth": "30/10/1888", "death": "",           "place": "",         "gender": "m"},
+    8:  {"name": "Jean Marie Piponnier",      "birth": "30/10/1887", "death": "25/03/1977", "place": "",         "gender": "m"},
     9:  {"name": "Henriette Morin",           "birth": "",           "death": "",           "place": "",         "gender": "f"},
     10: {"name": "Francis Piponnier",         "birth": "30/08/1890", "death": "",           "place": "",         "gender": "m"},
     11: {"name": "Marguerite Piponnier",      "birth": "18/09/1895", "death": "",           "place": "",         "gender": "f"},
     12: {"name": "Hortense Piponnier",        "birth": "",           "death": "",           "place": "",         "gender": "f"},
     13: {"name": "Francis Pourprix",          "birth": "",           "death": "",           "place": "",         "gender": "m"},
-    14: {"name": "Nicole Pourprix",           "birth": "23/08/1943", "death": "",           "place": "",         "gender": "f"},
+    14: {"name": "Nicole Pourprix",           "birth": "22/08/1943", "death": "",           "place": "",         "gender": "f"},
     15: {"name": "Marie-France Pourprix",     "birth": "",           "death": "",           "place": "",         "gender": "f"},
-    16: {"name": "Mohamed El ralenti",        "birth": "",           "death": "",           "place": "",         "gender": "m"},
-    17: {"name": "Florence El ralenti",       "birth": "",           "death": "",           "place": "",         "gender": "f"},
-    18: {"name": "Natalie El ralenti",        "birth": "",           "death": "",           "place": "",         "gender": "f"},
-    19: {"name": "Barchive El ralenti",       "birth": "02/05/1972", "death": "",           "place": "",         "gender": "f"},
+    16: {"name": "Mohamed El raiani",        "birth": "",           "death": "",           "place": "",         "gender": "m"},
+    17: {"name": "Florence El raiani",       "birth": "",           "death": "",           "place": "",         "gender": "f"},
+    18: {"name": "Natalie El raiani",        "birth": "",           "death": "",           "place": "",         "gender": "f"},
+    19: {"name": "Sandrine El raiani",       "birth": "02/08/1973", "death": "",           "place": "",         "gender": "f"},
     20: {"name": "Régis Volle",               "birth": "23/03/1977", "death": "",           "place": "",         "gender": "m"},
     21: {"name": "Jeanne Marie DuBuisson",    "birth": "",           "death": "",           "place": "",         "gender": "f"},
+    22 : {"name": "Anne Viennois",               "birth": "",           "death": "",           "place": "", "gender": "f"},
 }
 
 FILIATIONS = [
@@ -192,7 +193,7 @@ def build_figure(pid):
 
 # ── SIDEBAR ───────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("## 🌳 Famille Piponnier")
+    st.markdown("## Famille Piponnier")
     st.markdown("<p style='font-size:12px;color:#AAA;margin-top:-10px;'>6 générations · 21 membres</p>", unsafe_allow_html=True)
     st.markdown("---")
 
