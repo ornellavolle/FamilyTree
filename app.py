@@ -58,10 +58,10 @@ PERSONS = {
     13: {"name": "Francis Pourprix",          "birth": "",           "death": "",           "place": "",         "gender": "m"},
     14: {"name": "Nicole Pourprix",           "birth": "23/08/1943", "death": "",           "place": "",         "gender": "f"},
     15: {"name": "Marie-France Pourprix",     "birth": "",           "death": "",           "place": "",         "gender": "f"},
-    16: {"name": "Mohamed El ralenti",        "birth": "",           "death": "",           "place": "",         "gender": "m"},
-    17: {"name": "Florence El ralenti",       "birth": "",           "death": "",           "place": "",         "gender": "f"},
-    18: {"name": "Natalie El ralenti",        "birth": "",           "death": "",           "place": "",         "gender": "f"},
-    19: {"name": "Barchive El ralenti",       "birth": "02/05/1972", "death": "",           "place": "",         "gender": "f"},
+    16: {"name": "Mohamed El raiani",        "birth": "",           "death": "",           "place": "",         "gender": "m"},
+    17: {"name": "Florence El raiani",       "birth": "",           "death": "",           "place": "",         "gender": "f"},
+    18: {"name": "Natalie El raiani",        "birth": "",           "death": "",           "place": "",         "gender": "f"},
+    19: {"name": "Sandrine El raiani",       "birth": "02/05/1972", "death": "",           "place": "",         "gender": "f"},
     20: {"name": "Régis Volle",               "birth": "23/03/1977", "death": "",           "place": "",         "gender": "m"},
     21: {"name": "Jeanne Marie DuBuisson",    "birth": "",           "death": "",           "place": "",         "gender": "f"},
     22 : {"name": "Jean Laurent",                "birth": "",           "death": "",           "place": "", "gender": "m"},
@@ -73,7 +73,7 @@ FILIATIONS = [
     (3,5),(4,5),(3,6),(4,6),(3,7),(4,7),(3,8),(4,8),(3,10),(4,10),(3,11),(4,11),
     (8,12),(9,12),
     (12,14),(13,14),(12,15),(13,15),
-    (14,17),(16,17),(14,18),(16,18),(14,19),(16,19),
+    (14,17),(16,17),(14,18),(16,18),(14,19),(16,19), (22,4), (23,4), 
 ]
 
 UNIONS = {
