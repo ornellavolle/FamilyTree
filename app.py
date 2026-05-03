@@ -1,6 +1,6 @@
 """
 Arbre Généalogique · Famille Piponnier
-Lancer avec : streamlit run arbre_genealogique_piponnier.py
+Lancer avec : streamlit run app.py
 
 Dépendances : streamlit, anthropic
 Installation : pip install streamlit anthropic
@@ -35,10 +35,7 @@ h1 { font-family:'Playfair Display',serif!important; font-weight:400!important; 
 .detail-row    { display:flex; gap:6px; font-size:13px; color:#555; margin-bottom:6px; }
 .detail-label  { color:#999; min-width:80px; font-size:12px; }
 .detail-sect   { font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#999; margin:10px 0 5px; }
-.rel-link-btn  { display:inline-flex; align-items:center; gap:5px; font-size:12px; color:#3B82F6; cursor:pointer; padding:3px 0; border:none; background:none; text-align:left; }
 .rel-tag       { font-size:10px; color:#999; background:#F3F4F6; padding:1px 6px; border-radius:10px; }
-.story-btn     { width:100%; display:flex; align-items:center; gap:10px; padding:12px; border-radius:8px; border:1px solid #E8E5E0; background:#F9F9F9; cursor:pointer; margin-top:12px; }
-.story-icon    { width:34px; height:34px; border-radius:50%; background:#EFF6FF; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
 .story-area    { background:#FAF8F5; border:1px solid #E8E5E0; border-radius:8px; padding:14px; margin-top:10px; font-size:13px; color:#444; line-height:1.8; }
 hr             { border:none; border-top:1px solid #EEE; margin:1rem 0; }
 </style>
@@ -86,10 +83,6 @@ UNIONS = {
     "14-16": {"a": 14, "b": 16, "date": "ca. 1970"},
     "19-20": {"a": 19, "b": 20, "date": "ca. 2000"},
 }
-
-# ─── POSITIONS (rangées sans chevauchement) ───────────────────────────────────
-# Chaque rangée est centrée et espacée automatiquement dans le JS embarqué.
-# Ces coordonnées SVG sont calculées dynamiquement côté client.
 
 ROLE_STYLES = {
     "self":                 {"fill": "#FEF3C7", "stroke": "#D97706", "text": "#92400E"},
@@ -218,8 +211,6 @@ if "chosen_id" not in st.session_state:
     st.session_state.chosen_id = 18
 if "view_all" not in st.session_state:
     st.session_state.view_all = False
-if "detail_id" not in st.session_state:
-    st.session_state.detail_id = None
 if "story" not in st.session_state:
     st.session_state.story = {}
 
@@ -232,7 +223,6 @@ with st.sidebar:
     )
     st.markdown("---")
 
-    # Voir tout / Vue personnelle
     if st.button(
         "🌐 Voir tout l'arbre" if not st.session_state.view_all else "👤 Vue personnelle",
         use_container_width=True,
@@ -262,7 +252,6 @@ with st.sidebar:
     chosen_id = st.session_state.chosen_id
     st.markdown("---")
 
-    # Résumé des relations
     roles = get_relations(chosen_id) if not st.session_state.view_all else {k: "neutre" for k in PERSONS}
     if not st.session_state.view_all:
         roles[chosen_id] = "self"
@@ -289,8 +278,6 @@ with st.sidebar:
         )
 
     st.markdown("---")
-
-    # Légende
     st.markdown(
         "<p style='font-size:11px;letter-spacing:1.5px;color:#888;text-transform:uppercase;'>Légende</p>",
         unsafe_allow_html=True,
@@ -303,26 +290,28 @@ with st.sidebar:
             unsafe_allow_html=True,
         )
 
-# ─── ARBRE (HTML+JS embarqué) ─────────────────────────────────────────────────
-persons_json  = json.dumps(PERSONS)
-filiations_json = json.dumps(FILIATIONS)
-unions_json   = json.dumps(UNIONS)
-styles_json   = json.dumps(ROLE_STYLES)
-selected_id   = chosen_id
-view_all_js   = "true" if st.session_state.view_all else "false"
+# ─── PRÉPARER LES JSON POUR LE JS (évite les conflits d'accolades dans les f-strings) ───
+persons_json    = json.dumps(PERSONS)
+filiations_list = [[p, c] for p, c in FILIATIONS]
+filiations_json = json.dumps(filiations_list)
+unions_clean    = {k: {"a": v["a"], "b": v["b"], "date": v["date"]} for k, v in UNIONS.items()}
+unions_json     = json.dumps(unions_clean)
+styles_json     = json.dumps(ROLE_STYLES)
+view_all_js     = "true" if st.session_state.view_all else "false"
 
-tree_html = f"""
+# ─── ARBRE HTML+JS ────────────────────────────────────────────────────────────
+tree_html = """
 <style>
-*{{box-sizing:border-box;margin:0;padding:0;}}
-#wrap{{width:100%;height:680px;background:#FAF8F5;border-radius:10px;border:1px solid #E8E5E0;overflow:hidden;position:relative;}}
-#tree-svg{{width:100%;height:100%;cursor:grab;display:block;}}
-#tree-svg:active{{cursor:grabbing;}}
-.ng{{cursor:pointer;}}
-.ng:hover .nr{{opacity:.82;}}
-#tt{{position:absolute;background:#fff;border:1px solid #DDD;border-radius:8px;padding:8px 10px;font-size:12px;font-family:Inter,sans-serif;pointer-events:none;opacity:0;transition:opacity .15s;max-width:210px;z-index:5;}}
-#tt.show{{opacity:1;}}
-#tt strong{{font-weight:600;display:block;margin-bottom:3px;color:#222;}}
-#tt span{{color:#666;font-size:11px;display:block;line-height:1.6;}}
+*{box-sizing:border-box;margin:0;padding:0;}
+#wrap{width:100%;height:680px;background:#FAF8F5;border-radius:10px;border:1px solid #E8E5E0;overflow:hidden;position:relative;}
+#tree-svg{width:100%;height:100%;cursor:grab;display:block;}
+#tree-svg:active{cursor:grabbing;}
+.ng{cursor:pointer;}
+.ng:hover .nr{opacity:.82;}
+#tt{position:absolute;background:#fff;border:1px solid #DDD;border-radius:8px;padding:8px 10px;font-size:12px;font-family:Inter,sans-serif;pointer-events:none;opacity:0;transition:opacity .15s;max-width:210px;z-index:5;}
+#tt.show{opacity:1;}
+#tt strong{font-weight:600;display:block;margin-bottom:3px;color:#222;}
+#tt span{color:#666;font-size:11px;display:block;line-height:1.6;}
 </style>
 <div id="wrap">
   <svg id="tree-svg" viewBox="0 0 1300 680" preserveAspectRatio="xMidYMid meet">
@@ -332,152 +321,204 @@ tree_html = f"""
   <div id="tt"></div>
 </div>
 <script>
-const P={json.dumps(PERSONS)};
-const FILIATIONS={json.dumps([[p,c] for p,c in FILIATIONS])};
-const UNIONS={json.dumps({{k:{{"a":v["a"],"b":v["b"],"date":v["date"]}} for k,v in UNIONS.items()}})};
-const ROLE_STYLES={json.dumps(ROLE_STYLES)};
-const SEL_ID={selected_id};
-const VIEW_ALL={view_all_js};
-
-const CW=7.5,PAD=18,HGAP=14,ROW_H=52,ROW_GAP=68;
+""" + f"""
+const P = {persons_json};
+const FILIATIONS = {filiations_json};
+const UNIONS = {unions_json};
+const ROLE_STYLES = {styles_json};
+const SEL_ID = {chosen_id};
+const VIEW_ALL = {view_all_js};
+""" + """
+const CW=7.5, PAD=18, HGAP=14, ROW_H=52, ROW_GAP=68;
 
 const ROWS=[
-  {{y:40, ids:[2,1]}},
-  {{y:40+ROW_H+ROW_GAP, ids:[4,3]}},
-  {{y:40+(ROW_H+ROW_GAP)*2, ids:[5,6,7,8,9,10,11,21]}},
-  {{y:40+(ROW_H+ROW_GAP)*3, ids:[13,12]}},
-  {{y:40+(ROW_H+ROW_GAP)*4, ids:[16,14,15]}},
-  {{y:40+(ROW_H+ROW_GAP)*5, ids:[17,18,19,20]}},
+  {y:40,          ids:[2,1]},
+  {y:40+ROW_H+ROW_GAP,         ids:[4,3]},
+  {y:40+(ROW_H+ROW_GAP)*2,     ids:[5,6,7,8,9,10,11,21]},
+  {y:40+(ROW_H+ROW_GAP)*3,     ids:[13,12]},
+  {y:40+(ROW_H+ROW_GAP)*4,     ids:[16,14,15]},
+  {y:40+(ROW_H+ROW_GAP)*5,     ids:[17,18,19,20]},
 ];
 
-function measure(name){{
+function measure(name){
   const words=name.split(' ');
-  if(words.length<=2)return{{lines:[name],w:Math.max(name.length*CW+PAD*2,72),h:34}};
+  if(words.length<=2) return {lines:[name], w:Math.max(name.length*CW+PAD*2,72), h:34};
   const h=Math.ceil(words.length/2);
-  const l1=words.slice(0,h).join(' '),l2=words.slice(h).join(' ');
-  return{{lines:[l1,l2],w:Math.max(Math.max(l1.length,l2.length)*CW+PAD*2,72),h:46}};
-}}
+  const l1=words.slice(0,h).join(' '), l2=words.slice(h).join(' ');
+  return {lines:[l1,l2], w:Math.max(Math.max(l1.length,l2.length)*CW+PAD*2,72), h:46};
+}
 
-function layoutRow(ids){{
+function layoutRow(ids){
   const ms=ids.map(id=>measure(P[id].name));
   const total=ms.reduce((s,m)=>s+m.w,0)+(ids.length-1)*HGAP;
   let cx=(1300-total)/2;
-  const pos={{}};
-  ids.forEach((id,i)=>{{pos[id]={{x:cx+ms[i].w/2,m:ms[i]}};cx+=ms[i].w+HGAP;}});
+  const pos={};
+  ids.forEach((id,i)=>{pos[id]={x:cx+ms[i].w/2, m:ms[i]}; cx+=ms[i].w+HGAP;});
   return pos;
-}}
+}
 
-const COORDS={{}};
-ROWS.forEach(row=>{{
+const COORDS={};
+ROWS.forEach(row=>{
   const pos=layoutRow(row.ids);
-  row.ids.forEach(id=>{{COORDS[id]={{x:pos[id].x,y:row.y+pos[id].m.h/2,m:pos[id].m}}}});
-}});
+  row.ids.forEach(id=>{COORDS[id]={x:pos[id].x, y:row.y+pos[id].m.h/2, m:pos[id].m};});
+});
 
-function getRels(pid){{
-  const roles={{[pid]:"self"}};
+function getRels(pid){
+  const roles={[pid]:"self"};
   const parents=FILIATIONS.filter(([p,c])=>c===pid).map(([p])=>p);
-  parents.forEach(p=>{{
+  parents.forEach(p=>{
     roles[p]="parent";
-    FILIATIONS.filter(([gp,gc])=>gc===p).forEach(([gp])=>{{
+    FILIATIONS.filter(([gp,gc])=>gc===p).forEach(([gp])=>{
       roles[gp]="grand-parent";
-      FILIATIONS.filter(([ggp,ggc])=>ggc===gp).forEach(([ggp])=>{{roles[ggp]="arrière grand-parent";}});
-    }});
-  }});
-  Object.values(UNIONS).forEach(u=>{{
-    if(u.a===pid)roles[u.b]=roles[u.b]||"conjoint(e)";
-    if(u.b===pid)roles[u.a]=roles[u.a]||"conjoint(e)";
-  }});
+      FILIATIONS.filter(([ggp,ggc])=>ggc===gp).forEach(([ggp])=>{roles[ggp]="arrière grand-parent";});
+    });
+  });
+  Object.values(UNIONS).forEach(u=>{
+    if(u.a===pid) roles[u.b]=roles[u.b]||"conjoint(e)";
+    if(u.b===pid) roles[u.a]=roles[u.a]||"conjoint(e)";
+  });
   const children=FILIATIONS.filter(([p])=>p===pid).map(([,c])=>c);
-  children.forEach(c=>{{
+  children.forEach(c=>{
     roles[c]="enfant";
-    FILIATIONS.filter(([p2])=>p2===c).forEach(([,c2])=>{{roles[c2]="petit-enfant";}});
-  }});
+    FILIATIONS.filter(([p2])=>p2===c).forEach(([,c2])=>{roles[c2]="petit-enfant";});
+  });
   const siblings=new Set(parents.flatMap(par=>FILIATIONS.filter(([p])=>p===par).map(([,c])=>c).filter(c=>c!==pid)));
-  siblings.forEach(s=>{{roles[s]=roles[s]||"frère/sœur";}});
-  children.forEach(c=>{{Object.values(UNIONS).forEach(u=>{{if(u.a===c)roles[u.b]=roles[u.b]||"gendre/bru";if(u.b===c)roles[u.a]=roles[u.a]||"gendre/bru";}});}});
-  parents.forEach(p=>{{Object.values(UNIONS).forEach(u=>{{if(u.a===p)roles[u.b]=roles[u.b]||"parent";if(u.b===p)roles[u.a]=roles[u.a]||"parent";}});}});
-  siblings.forEach(s=>{{FILIATIONS.filter(([p2])=>p2===s).forEach(([,c2])=>{{roles[c2]=roles[c2]||"neveu/nièce";}});}});
+  siblings.forEach(s=>{roles[s]=roles[s]||"frère/sœur";});
+  children.forEach(c=>{Object.values(UNIONS).forEach(u=>{
+    if(u.a===c) roles[u.b]=roles[u.b]||"gendre/bru";
+    if(u.b===c) roles[u.a]=roles[u.a]||"gendre/bru";
+  });});
+  parents.forEach(p=>{Object.values(UNIONS).forEach(u=>{
+    if(u.a===p) roles[u.b]=roles[u.b]||"parent";
+    if(u.b===p) roles[u.a]=roles[u.a]||"parent";
+  });});
+  siblings.forEach(s=>{FILIATIONS.filter(([p2])=>p2===s).forEach(([,c2])=>{roles[c2]=roles[c2]||"neveu/nièce";});});
   return roles;
-}}
+}
 
-const curRoles=VIEW_ALL?Object.fromEntries(Object.keys(P).map(k=>[k,"neutre"])):getRels(SEL_ID);
-if(!VIEW_ALL)curRoles[SEL_ID]="self";
+const curRoles=VIEW_ALL
+  ? Object.fromEntries(Object.keys(P).map(k=>[k,"neutre"]))
+  : getRels(SEL_ID);
+if(!VIEW_ALL) curRoles[SEL_ID]="self";
 
-function mkEl(tag){{return document.createElementNS('http://www.w3.org/2000/svg',tag);}}
+function mkEl(tag){return document.createElementNS('http://www.w3.org/2000/svg',tag);}
 
-const LL=document.getElementById('LL'),NL=document.getElementById('NL');
+const LL=document.getElementById('LL'), NL=document.getElementById('NL');
 const vis=new Set(Object.keys(curRoles).map(Number));
 
-Object.values(UNIONS).forEach(u=>{{
-  if(!vis.has(u.a)||!vis.has(u.b))return;
-  const A=COORDS[u.a],B=COORDS[u.b];
+Object.values(UNIONS).forEach(u=>{
+  if(!vis.has(u.a)||!vis.has(u.b)) return;
+  const A=COORDS[u.a], B=COORDS[u.b];
   const line=mkEl('line');
-  line.setAttribute('x1',A.x);line.setAttribute('y1',A.y);line.setAttribute('x2',B.x);line.setAttribute('y2',B.y);
-  line.setAttribute('stroke','#CCCCCC');line.setAttribute('stroke-width','1.5');line.setAttribute('stroke-dasharray','4 3');
+  line.setAttribute('x1',A.x); line.setAttribute('y1',A.y);
+  line.setAttribute('x2',B.x); line.setAttribute('y2',B.y);
+  line.setAttribute('stroke','#CCCCCC'); line.setAttribute('stroke-width','1.5');
+  line.setAttribute('stroke-dasharray','4 3');
   LL.appendChild(line);
-  if(u.date){{
-    const tx=(A.x+B.x)/2,ty=(A.y+B.y)/2;
-    const bg=mkEl('rect');bg.setAttribute('x',tx-26);bg.setAttribute('y',ty-9);bg.setAttribute('width',52);bg.setAttribute('height',14);bg.setAttribute('rx',3);bg.setAttribute('fill','#FAF8F5');LL.appendChild(bg);
-    const dt=mkEl('text');dt.setAttribute('x',tx);dt.setAttribute('y',ty+1);dt.setAttribute('text-anchor','middle');dt.setAttribute('font-size','9');dt.setAttribute('fill','#AAA');dt.setAttribute('font-family','Inter,sans-serif');dt.textContent=u.date;LL.appendChild(dt);
-  }}
-}});
+  if(u.date){
+    const tx=(A.x+B.x)/2, ty=(A.y+B.y)/2;
+    const bg=mkEl('rect');
+    bg.setAttribute('x',tx-26); bg.setAttribute('y',ty-9);
+    bg.setAttribute('width',52); bg.setAttribute('height',14);
+    bg.setAttribute('rx',3); bg.setAttribute('fill','#FAF8F5');
+    LL.appendChild(bg);
+    const dt=mkEl('text');
+    dt.setAttribute('x',tx); dt.setAttribute('y',ty+1);
+    dt.setAttribute('text-anchor','middle'); dt.setAttribute('font-size','9');
+    dt.setAttribute('fill','#AAA'); dt.setAttribute('font-family','Inter,sans-serif');
+    dt.textContent=u.date;
+    LL.appendChild(dt);
+  }
+});
 
-FILIATIONS.forEach(([pp,c])=>{{
-  if(!vis.has(pp)||!vis.has(c))return;
-  const A=COORDS[pp],B=COORDS[c];
+FILIATIONS.forEach(([pp,c])=>{
+  if(!vis.has(pp)||!vis.has(c)) return;
+  const A=COORDS[pp], B=COORDS[c];
   const my=(A.y+B.y)/2;
   const path=mkEl('path');
-  path.setAttribute('d',`M${{A.x}},${{A.y}} L${{A.x}},${{my}} L${{B.x}},${{my}} L${{B.x}},${{B.y}}`);
-  path.setAttribute('fill','none');path.setAttribute('stroke','#DDD');path.setAttribute('stroke-width','1');
+  path.setAttribute('d',`M${A.x},${A.y} L${A.x},${my} L${B.x},${my} L${B.x},${B.y}`);
+  path.setAttribute('fill','none'); path.setAttribute('stroke','#DDD'); path.setAttribute('stroke-width','1');
   LL.appendChild(path);
-}});
+});
 
-vis.forEach(pid=>{{
-  const info=P[pid],role=curRoles[pid]||"neutre",st=ROLE_STYLES[role]||ROLE_STYLES["neutre"];
-  const C=COORDS[pid];if(!C)return;
-  const m=C.m,nw=m.w,nh=m.h,nx=C.x-nw/2,ny=C.y-nh/2;
-  const g=mkEl('g');g.setAttribute('class','ng');
-  const rect=mkEl('rect');rect.setAttribute('class','nr');
-  rect.setAttribute('x',nx);rect.setAttribute('y',ny);rect.setAttribute('width',nw);rect.setAttribute('height',nh);
-  rect.setAttribute('rx',7);rect.setAttribute('fill',st.fill);rect.setAttribute('stroke',st.stroke);rect.setAttribute('stroke-width','1.5');
+vis.forEach(pid=>{
+  const info=P[pid], role=curRoles[pid]||"neutre", st=ROLE_STYLES[role]||ROLE_STYLES["neutre"];
+  const C=COORDS[pid]; if(!C) return;
+  const m=C.m, nw=m.w, nh=m.h, nx=C.x-nw/2, ny=C.y-nh/2;
+  const g=mkEl('g'); g.setAttribute('class','ng');
+  const rect=mkEl('rect'); rect.setAttribute('class','nr');
+  rect.setAttribute('x',nx); rect.setAttribute('y',ny);
+  rect.setAttribute('width',nw); rect.setAttribute('height',nh);
+  rect.setAttribute('rx',7); rect.setAttribute('fill',st.fill);
+  rect.setAttribute('stroke',st.stroke); rect.setAttribute('stroke-width','1.5');
   g.appendChild(rect);
-  if(m.lines.length===1){{
-    const t=mkEl('text');t.setAttribute('x',C.x);t.setAttribute('y',C.y);t.setAttribute('text-anchor','middle');t.setAttribute('dominant-baseline','central');t.setAttribute('font-size','11');t.setAttribute('fill',st.text);t.setAttribute('font-family','Inter,sans-serif');t.setAttribute('font-weight','500');t.textContent=m.lines[0];g.appendChild(t);
-  }}else{{
-    m.lines.forEach((ln,i)=>{{
-      const t=mkEl('text');t.setAttribute('x',C.x);t.setAttribute('y',ny+(i===0?13:29));t.setAttribute('text-anchor','middle');t.setAttribute('dominant-baseline','central');t.setAttribute('font-size','11');t.setAttribute('fill',st.text);t.setAttribute('font-family','Inter,sans-serif');t.setAttribute('font-weight','500');t.textContent=ln;g.appendChild(t);
-    }});
-  }}
-  const icon=mkEl('text');icon.setAttribute('x',nx+nw-4);icon.setAttribute('y',ny+4);icon.setAttribute('text-anchor','end');icon.setAttribute('dominant-baseline','hanging');icon.setAttribute('font-size','10');icon.setAttribute('fill',st.stroke);icon.setAttribute('font-family','Inter,sans-serif');icon.textContent=info.gender==='m'?'♂':'♀';g.appendChild(icon);
-  if(role==='self'){{const star=mkEl('text');star.setAttribute('x',nx+4);star.setAttribute('y',ny+3);star.setAttribute('dominant-baseline','hanging');star.setAttribute('font-size','10');star.setAttribute('fill',st.stroke);star.textContent='★';g.appendChild(star);}}
+  if(m.lines.length===1){
+    const t=mkEl('text');
+    t.setAttribute('x',C.x); t.setAttribute('y',C.y);
+    t.setAttribute('text-anchor','middle'); t.setAttribute('dominant-baseline','central');
+    t.setAttribute('font-size','11'); t.setAttribute('fill',st.text);
+    t.setAttribute('font-family','Inter,sans-serif'); t.setAttribute('font-weight','500');
+    t.textContent=m.lines[0]; g.appendChild(t);
+  } else {
+    m.lines.forEach((ln,i)=>{
+      const t=mkEl('text');
+      t.setAttribute('x',C.x); t.setAttribute('y',ny+(i===0?13:29));
+      t.setAttribute('text-anchor','middle'); t.setAttribute('dominant-baseline','central');
+      t.setAttribute('font-size','11'); t.setAttribute('fill',st.text);
+      t.setAttribute('font-family','Inter,sans-serif'); t.setAttribute('font-weight','500');
+      t.textContent=ln; g.appendChild(t);
+    });
+  }
+  const icon=mkEl('text');
+  icon.setAttribute('x',nx+nw-4); icon.setAttribute('y',ny+4);
+  icon.setAttribute('text-anchor','end'); icon.setAttribute('dominant-baseline','hanging');
+  icon.setAttribute('font-size','10'); icon.setAttribute('fill',st.stroke);
+  icon.setAttribute('font-family','Inter,sans-serif');
+  icon.textContent=info.gender==='m'?'♂':'♀';
+  g.appendChild(icon);
+  if(role==='self'){
+    const star=mkEl('text');
+    star.setAttribute('x',nx+4); star.setAttribute('y',ny+3);
+    star.setAttribute('dominant-baseline','hanging'); star.setAttribute('font-size','10');
+    star.setAttribute('fill',st.stroke); star.textContent='★';
+    g.appendChild(star);
+  }
   g.addEventListener('mouseenter',e=>showTT(e,pid));
   g.addEventListener('mousemove',e=>moveTT(e));
   g.addEventListener('mouseleave',hideTT);
   NL.appendChild(g);
-}});
+});
 
-function showTT(e,pid){{
-  const info=P[pid],role=curRoles[pid]||"",tip=document.getElementById('tt');
-  let html=`<strong>${{info.name}}</strong>`;
-  if(role&&role!=='neutre')html+=`<span>${{role.charAt(0).toUpperCase()+role.slice(1)}}</span>`;
-  html+=`<span>${{info.gender==='m'?'Homme':'Femme'}}</span>`;
-  if(info.birth)html+=`<span>Né(e) : ${{info.birth}}</span>`;
-  if(info.death)html+=`<span>Décédé(e) : ${{info.death}}</span>`;
-  if(info.place)html+=`<span>Lieu : ${{info.place}}</span>`;
-  tip.innerHTML=html;tip.classList.add('show');moveTT(e);
-}}
-function moveTT(e){{
-  const r=document.getElementById('wrap').getBoundingClientRect(),tip=document.getElementById('tt');
-  let x=e.clientX-r.left+12,y=e.clientY-r.top-10;
-  if(x+215>r.width)x=e.clientX-r.left-215;
-  tip.style.left=x+'px';tip.style.top=y+'px';
-}}
-function hideTT(){{document.getElementById('tt').classList.remove('show');}}
+function showTT(e,pid){
+  const info=P[pid], role=curRoles[pid]||"", tip=document.getElementById('tt');
+  let html=`<strong>${info.name}</strong>`;
+  if(role&&role!=='neutre') html+=`<span>${role.charAt(0).toUpperCase()+role.slice(1)}</span>`;
+  html+=`<span>${info.gender==='m'?'Homme':'Femme'}</span>`;
+  if(info.birth) html+=`<span>Né(e) : ${info.birth}</span>`;
+  if(info.death) html+=`<span>Décédé(e) : ${info.death}</span>`;
+  if(info.place) html+=`<span>Lieu : ${info.place}</span>`;
+  tip.innerHTML=html; tip.classList.add('show'); moveTT(e);
+}
+function moveTT(e){
+  const r=document.getElementById('wrap').getBoundingClientRect(), tip=document.getElementById('tt');
+  let x=e.clientX-r.left+12, y=e.clientY-r.top-10;
+  if(x+215>r.width) x=e.clientX-r.left-215;
+  tip.style.left=x+'px'; tip.style.top=y+'px';
+}
+function hideTT(){document.getElementById('tt').classList.remove('show');}
 
-let isDrag=false,ds={{x:0,y:0}},vo={{x:0,y:0}},dOrig={{x:0,y:0}};
+let isDrag=false, ds={x:0,y:0}, vo={x:0,y:0}, dOrig={x:0,y:0};
 const svg=document.getElementById('tree-svg');
-svg.addEventListener('mousedown',e=>{{if(e.target.closest('.ng'))return;isDrag=true;ds={{x:e.clientX,y:e.clientY}};dOrig={{...vo}};}});
-window.addEventListener('mousemove',e=>{{if(!isDrag)return;vo.x=dOrig.x+(e.clientX-ds.x);vo.y=dOrig.y+(e.clientY-ds.y);NL.setAttribute('transform',`translate(${{vo.x}},${{vo.y}})`);LL.setAttribute('transform',`translate(${{vo.x}},${{vo.y}})`);}}); 
+svg.addEventListener('mousedown',e=>{
+  if(e.target.closest('.ng')) return;
+  isDrag=true; ds={x:e.clientX,y:e.clientY}; dOrig={...vo};
+});
+window.addEventListener('mousemove',e=>{
+  if(!isDrag) return;
+  vo.x=dOrig.x+(e.clientX-ds.x); vo.y=dOrig.y+(e.clientY-ds.y);
+  NL.setAttribute('transform',`translate(${vo.x},${vo.y})`);
+  LL.setAttribute('transform',`translate(${vo.x},${vo.y})`);
+});
 window.addEventListener('mouseup',()=>isDrag=false);
 </script>
 """
@@ -509,7 +550,7 @@ with col1:
         f"""<div class='detail-card'>
         <div class='detail-avatar' style='background:{st2["fill"]};border:2px solid {st2["stroke"]};color:{st2["stroke"]}'>{initials}</div>
         <div class='detail-name'>{info["name"]}</div>
-        <div class='detail-role'>{role.capitalize() if role!='neutre' else ''} · {'Homme' if info['gender']=='m' else 'Femme'}</div>
+        <div class='detail-role'>{role.capitalize() if role != 'neutre' else ''} · {'Homme' if info['gender']=='m' else 'Femme'}</div>
         {"<div class='detail-row'><span class='detail-label'>Naissance</span><span>"+info['birth']+"</span></div>" if info['birth'] else ''}
         {"<div class='detail-row'><span class='detail-label'>Décès</span><span>"+info['death']+"</span></div>" if info['death'] else ''}
         {"<div class='detail-row'><span class='detail-label'>Lieu</span><span>"+info['place']+"</span></div>" if info['place'] else ''}
@@ -517,7 +558,6 @@ with col1:
         unsafe_allow_html=True,
     )
 
-    # Relations
     parents_ids  = [p for p, c in FILIATIONS if c == detail_id]
     children_ids = [c for p, c in FILIATIONS if p == detail_id]
     spouses_ids  = [u["b"] if u["a"]==detail_id else u["a"] for u in UNIONS.values() if u["a"]==detail_id or u["b"]==detail_id]
@@ -545,7 +585,6 @@ with col1:
     if rel_html:
         st.markdown(f"<div class='detail-card'>{rel_html}</div>", unsafe_allow_html=True)
 
-    # Bouton récit de vie
     st.markdown("---")
     if st.button("✍️ Générer le récit de vie", use_container_width=True, key="story_btn"):
         with st.spinner("Génération du récit en cours…"):
