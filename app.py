@@ -73,12 +73,15 @@ PERSONS = {
     28 : {"name": "Éloise El raiani",             "birth": "",           "death": "", "place": "", "gender" : "f"},
     29 : {"name": "Philibert Baconnet",             "birth": "",           "death": "", "place": "",    "gender" : "m"},
     30 : {"name": "Anne Marie Baconnet né()",             "birth": "",           "death": "", "place": "",    "gender" : "f"},
+    31 : {"name": "Claude Marie Piponnier",             "birth": "11/03/1889",           "death": "21/05/1889", "place": "",    "gender" : "f"},
+    32 : {"name": "Emile Piponnier",             "birth": "31/01/1892",           "death": "21/05", "place": "",    "gender" : "m"},
+    33 : {"name": "Josephine Piponnier",             "birth": "02/12/1894",           "death": "10/03/1988", "place": "Lyon, France",    "gender" : "f"},
 
 }
 
 FILIATIONS = [
     (1,3),(2,3),
-    (3,5),(4,5),(3,6),(4,6),(3,7),(4,7),(3,8),(4,8),(3,10),(4,10),(3,11),(4,11),
+    (3,5),(4,5),(3,6),(4,6),(3,7),(4,7),(3,8),(4,8),(3,10),(4,10),(3,11),(4,11),(3,31),(4,31),(3,32),(4,32),(3,33),(4,33),
     (8,12),(9,12),
     (12,14),(13,14),(12,15),(13,15),
     (14,17),(16,17),(14,18),(16,18),(14,19),(16,19),
@@ -348,7 +351,7 @@ const CW=7.5, PAD=18, HGAP=14, ROW_H=52, ROW_GAP=68;
 const ROWS=[
   {y:40+(ROW_H+ROW_GAP)*1, ids:[23,22,2,1]}, 
   {y:40+(ROW_H+ROW_GAP)*2, ids:[4,3,  29,30]},
-  {y:40+(ROW_H+ROW_GAP)*3, ids:[5,6,7,10,21,11,8,  9]},
+  {y:40+(ROW_H+ROW_GAP)*3, ids:[5,6,7,31,32,33,10,21,11,8,9]},
   {y:40+(ROW_H+ROW_GAP)*4, ids:[13,12]},
   {y:40+(ROW_H+ROW_GAP)*5, ids:[16,14,15]},
   {y:40+(ROW_H+ROW_GAP)*6, ids:[17,18,19,20]},
