@@ -296,7 +296,10 @@ with st.sidebar:
 # ─── ARBRE (HTML+JS embarqué) ─────────────────────────────────────────────────
 persons_json  = json.dumps(PERSONS)
 filiations_json = json.dumps(FILIATIONS)
-unions_json   = json.dumps(UNIONS)
+unions_json = json.dumps({
+    k: {"a": v["a"], "b": v["b"], "date": v["date"]}
+    for k, v in UNIONS.items()
+})
 styles_json   = json.dumps(ROLE_STYLES)
 selected_id   = chosen_id
 view_all_js   = "true" if st.session_state.view_all else "false"
