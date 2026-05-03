@@ -136,7 +136,7 @@ FILIATIONS = [
 UNIONS = {
     "1-2":   {"a": 1,  "b": 2,  "date": ""},
     "3-4":   {"a": 3,  "b": 4,  "date": "mariage le 28/02/1878"},
-    "8-9":   {"a": 8,  "b": 9,  "date": ""},
+    "8-9":   {"a": 8,  "b": 9,  "date": "27 novembre 1913"},
     "10-21": {"a": 10, "b": 21, "date": "7 juin 1919", "place": "Simandre, 71522, Saône-et-Loire, Bourgogne, France"},
     "12-13": {"a": 12, "b": 13, "date": ""},
     "14-16": {"a": 14, "b": 16, "date": "ca. 1970"},
@@ -182,15 +182,23 @@ LEGEND_ORDER = [
 # ─── LOGIQUE RELATIONS ────────────────────────────────────────────────────────
 def get_relations(pid: int) -> dict:
     roles = {pid: "self"}
+
+    # 🔥 Nouvelle gestion infinie des ancêtres
+    add_ancestors(pid, 1, roles)
+
+def add_ancestors(pid, level, roles):
     parents = [p for p, c in FILIATIONS if c == pid]
     for p in parents:
-        roles[p] = "parent"
-        for gp, gc in FILIATIONS:
-            if gc == p:
-                roles[gp] = "grand-parent"
-                for ggp, ggc in FILIATIONS:
-                    if ggc == gp:
-                        roles[ggp] = "arrière grand-parent"
+        if level == 1:
+            role = "parent"
+        elif level == 2:
+            role = "grand-parent"
+        else:
+            role = "arrière " * (level - 2) + "grand-parent"
+
+        roles[p] = role
+        add_ancestors(p, level + 1, roles)
+
     for u in UNIONS.values():
         if u["a"] == pid: roles.setdefault(u["b"], "conjoint(e)")
         if u["b"] == pid: roles.setdefault(u["a"], "conjoint(e)")
