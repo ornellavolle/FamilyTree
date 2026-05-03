@@ -11,8 +11,8 @@ import anthropic
 import json
 
 st.set_page_config(
-    page_title="Arbre Généalogique · Famille Piponnier",
-    page_icon="🌳",
+    page_title="Arbre Généalogique",
+    page_icon="",
     layout="wide",
 )
 
