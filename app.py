@@ -360,7 +360,7 @@ const CW=7.5, PAD=18, HGAP=50, ROW_H=52, ROW_GAP=80;
 
 const ROWS=[
   {y:40+(ROW_H+ROW_GAP)*1, ids:[23,22,2,1]}, 
-  {y:40+(ROW_H+ROW_GAP)*2, ids:[4,3,  29,30]},
+  {y:40+(ROW_H+ROW_GAP)*2, ids:[41, 4,3,  29,30]},
   {y:40+(ROW_H+ROW_GAP)*3, ids:[5,6,7,31,32,33,10,21,11,8,9]},
   {y:40+(ROW_H+ROW_GAP)*4, ids:[13,12]},
   {y:40+(ROW_H+ROW_GAP)*5, ids:[16,14,15, 36, 37]},
