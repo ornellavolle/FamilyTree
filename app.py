@@ -183,8 +183,9 @@ LEGEND_ORDER = [
 def get_relations(pid: int) -> dict:
     roles = {pid: "self"}
 
-    # 🔥 Nouvelle gestion infinie des ancêtres
     add_ancestors(pid, 1, roles)
+
+    return roles  # 🔥 OBLIGATOIRE
 
 def add_ancestors(pid, level, roles):
     parents = [p for p, c in FILIATIONS if c == pid]
