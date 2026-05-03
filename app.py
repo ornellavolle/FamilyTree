@@ -216,7 +216,7 @@ if "story" not in st.session_state:
 
 # ─── SIDEBAR ──────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("##")
+    st.markdown("## Arbre Généalogique")
     st.markdown(
         "<p style='font-size:12px;color:#AAA;margin-top:-10px;'>6 générations · 21 membres</p>",
         unsafe_allow_html=True,
@@ -224,7 +224,7 @@ with st.sidebar:
     st.markdown("---")
 
     if st.button(
-        "🌐 Voir tout l'arbre" if not st.session_state.view_all else "👤 Vue personnelle",
+        "🌐 Voir tout l'arbre" if not st.session_state.view_all else "Vue individuelle",
         use_container_width=True,
     ):
         st.session_state.view_all = not st.session_state.view_all
