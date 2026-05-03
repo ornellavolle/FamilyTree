@@ -398,25 +398,12 @@ const VIEW_ALL = {view_all_js};
 const CW=7.5, PAD=18, HGAP=50, ROW_H=52, ROW_GAP=80;
 
 const ROWS=[
-  // génération 1
   {y:40+(ROW_H+ROW_GAP)*1, ids:[23,22,2,1]}, 
-
-  // génération 2 (parents de 3/4 + autres branches)
-  {y:40+(ROW_H+ROW_GAP)*2, ids:[29,30,4,3,42,43,45,46,48,41]},
-
-  // génération 3 (enfants principaux)
-  {y:40+(ROW_H+ROW_GAP)*3, ids:[5,6,7,8,10,21,11,9,31,32,33,51]},
-
-  // génération 4
-  {y:40+(ROW_H+ROW_GAP)*4, ids:[13,12,49,50,52,53,54]},
-
-  // génération 5 (Laurent + mariage)
-  {y:40+(ROW_H+ROW_GAP)*5, ids:[36,37,16,14,15]},
-
-  // génération 6 (MENAGER enfants)
-  {y:40+(ROW_H+ROW_GAP)*6, ids:[39,40,17,18,19,20]},
-
-  // génération 7
+  {y:40+(ROW_H+ROW_GAP)*2, ids:[42,43,45,46,48,41, 4,3,  29,30]},
+  {y:40+(ROW_H+ROW_GAP)*3, ids:[5,6,48,7,51,31,32,33,10,21,11,56, 57,8,9]},
+  {y:40+(ROW_H+ROW_GAP)*4, ids:[50,,49,13,12, 58,59,60,61,62,  52,53,54]},
+  {y:40+(ROW_H+ROW_GAP)*5, ids:[16,14,15, 36, 37]},
+  {y:40+(ROW_H+ROW_GAP)*6, ids:[17,18,19,20,39,40]},
   {y:40+(ROW_H+ROW_GAP)*7, ids:[34,35,27,28,24,25,26]},
 ];
 
