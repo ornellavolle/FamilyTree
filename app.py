@@ -92,7 +92,6 @@ PERSONS = {
     48 : {"name": "Philibert Antoine Frerot",      "birth": "", "death": "", "place": "", "gender": "m"},
     49 : {"name": "Jeanne Mathilde Frerot",       "birth": "Née en 1906", "death": "après 1926", "place": "", "gender": "f"},
     50 : {"name": "Henri Guerin",       "birth": "", "death": "", "place": "", "gender": "m"},
-    51 : {"name": "Jean Frerot",       "birth": "Né en 1900", "death": "", "place": "", "gender": "m"}
 }   
 
 FILIATIONS = [
@@ -120,6 +119,7 @@ UNIONS = {
     "22-23": {"a": 22, "b": 23, "date": "19/01/1852", "place": "Simandre, Saône-et-Loire, France"},
     "36-37": {"a": 36, "b": 37, "date": ""},
     "6-48":   {"a": 6,  "b": 48, "date": "27 août 1904", "place": "Loisy, 71261, Saône-et-Loire, Bourgogne, France"},
+    "49-50":   {"a": 49,  "b": 50, "date": "entre 1921 et 1926", "place": "Gigny-sur-Saône, 71219, Saône-et-Loire, Bourgogne, France "},
 }
 
 ROLE_STYLES = {
@@ -373,7 +373,7 @@ const ROWS=[
   {y:40+(ROW_H+ROW_GAP)*1, ids:[23,22,2,1]}, 
   {y:40+(ROW_H+ROW_GAP)*2, ids:[42,43,45,46,48,41, 4,3,  29,30]},
   {y:40+(ROW_H+ROW_GAP)*3, ids:[5,6,48,7,31,32,33,10,21,11,8,9]},
-  {y:40+(ROW_H+ROW_GAP)*4, ids:[49,13,12]},
+  {y:40+(ROW_H+ROW_GAP)*4, ids:[50,49,13,12]},
   {y:40+(ROW_H+ROW_GAP)*5, ids:[16,14,15, 36, 37]},
   {y:40+(ROW_H+ROW_GAP)*6, ids:[17,18,19,20,39,40]},
   {y:40+(ROW_H+ROW_GAP)*7, ids:[34,35,27,28,24,25,26]},
