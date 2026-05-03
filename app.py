@@ -76,7 +76,8 @@ PERSONS = {
     31 : {"name": "Claude Marie Piponnier",             "birth": "11/03/1889",           "death": "21/05/1889", "place": "",    "gender" : "f"},
     32 : {"name": "Emile Piponnier",             "birth": "31/01/1892",           "death": "21/05", "place": "",    "gender" : "m"},
     33 : {"name": "Josephine Piponnier",             "birth": "02/12/1894",           "death": "10/03/1988", "place": "Lyon, France",    "gender" : "f"},
-
+    34 : {"name": "Josephine Martinez",             "birth": "",           "death": "", "place": "",    "gender"    : "f"},
+    35 : {"name": "Armand Martinez",             "birth": "",           "death": "", "place": "",    "gender"    : "m"},
 }
 
 FILIATIONS = [
@@ -86,7 +87,7 @@ FILIATIONS = [
     (12,14),(13,14),(12,15),(13,15),
     (14,17),(16,17),(14,18),(16,18),(14,19),(16,19),
     (22,4), (23,4), (20,24), 
-    (19,24), (20,25), (19,25), (20,26), (19,26), (18,27), (18, 28), 
+    (19,24), (20,25), (19,25), (20,26), (19,26), (18,27), (18, 28), (17,34), (17,35),
     (29,9), (30,9), 
 ]
 
