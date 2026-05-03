@@ -74,7 +74,7 @@ PERSONS = {
     29 : {"name": "Philibert Baconnet",             "birth": "",           "death": "", "place": "",    "gender" : "m"},
     30 : {"name": "Anne Marie Baconnet né()",             "birth": "",           "death": "", "place": "",    "gender" : "f"},
     31 : {"name": "Claude Marie Piponnier",             "birth": "11/03/1889",           "death": "21/05/1889", "place": "",    "gender" : "f"},
-    32 : {"name": "Emile Piponnier",             "birth": "31/01/1892",           "death": "21/05", "place": "",    "gender" : "m"},
+    32 : {"name": "Emile Piponnier",             "birth": "31/01/1892",           "death": " 21/03/1968", "place": "Lons-le-Saunier, 39300, Jura, Franche-Comté, France",    "gender" : "m"},
     33 : {"name": "Josephine Piponnier",             "birth": "02/12/1894",           "death": "10/03/1988", "place": "Lyon, France",    "gender" : "f"},
     34 : {"name": "Josephine Martinez",             "birth": "",           "death": "", "place": "",    "gender"    : "f"},
     35 : {"name": "Armand Martinez",             "birth": "",           "death": "", "place": "",    "gender"    : "m"},
@@ -93,6 +93,7 @@ PERSONS = {
     49 : {"name": "Jeanne Mathilde Frerot",       "birth": "Née en 1906", "death": "après 1926", "place": "", "gender": "f"},
     50 : {"name": "Henri Guerin",       "birth": "", "death": "", "place": "", "gender": "m"},
     51 : {"name": "Claude-Marie Boumont (ou Benoit)",       "birth": "", "death": "", "place": "", "gender": "m"},
+    52 : {"name": "René Piponnier",       "birth": "05/05/1920", "death": "03/01/2000", "place": "Millery, 69133, Rhône, Rhône-Alpes, France", "gender": "m"},
 }   
 
 FILIATIONS = [
@@ -106,14 +107,14 @@ FILIATIONS = [
     (29,9), (30,9), (17,34), (17,35),
     (36,39), (37,39), (36,40), (37,40),(36,20), (37,20),
     (22,41), (23,41),(22,42), (23,42),(22,43), (23,43),(22,45), (23,45),(22,46), (23,46),(22,48), (23,48),
-    (6,49), (48,49),
+    (6,49), (48,49), (10,52), (21,52),
 ]
 
 UNIONS = {
     "1-2":   {"a": 1,  "b": 2,  "date": ""},
     "3-4":   {"a": 3,  "b": 4,  "date": "mariage le 28/02/1878"},
     "8-9":   {"a": 8,  "b": 9,  "date": ""},
-    "10-21": {"a": 10, "b": 21, "date": ""},
+    "10-21": {"a": 10, "b": 21, "date": "7 juin 1919", "place": "Simandre, 71522, Saône-et-Loire, Bourgogne, France"},
     "12-13": {"a": 12, "b": 13, "date": ""},
     "14-16": {"a": 14, "b": 16, "date": "ca. 1970"},
     "19-20": {"a": 19, "b": 20, "date": "ca. 2000"},
@@ -375,7 +376,7 @@ const ROWS=[
   {y:40+(ROW_H+ROW_GAP)*1, ids:[23,22,2,1]}, 
   {y:40+(ROW_H+ROW_GAP)*2, ids:[42,43,45,46,48,41, 4,3,  29,30]},
   {y:40+(ROW_H+ROW_GAP)*3, ids:[5,6,48,7,51,31,32,33,10,21,11,8,9]},
-  {y:40+(ROW_H+ROW_GAP)*4, ids:[50,49,13,12]},
+  {y:40+(ROW_H+ROW_GAP)*4, ids:[50,49,13,12, 52]},
   {y:40+(ROW_H+ROW_GAP)*5, ids:[16,14,15, 36, 37]},
   {y:40+(ROW_H+ROW_GAP)*6, ids:[17,18,19,20,39,40]},
   {y:40+(ROW_H+ROW_GAP)*7, ids:[34,35,27,28,24,25,26]},
