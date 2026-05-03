@@ -523,7 +523,7 @@ window.addEventListener('mouseup',()=>isDrag=false);
 </script>
 """
 
-st.markdown("# 🌳 Arbre Généalogique · Famille Piponnier")
+st.markdown("# Arbre Généalogique")
 st.components.v1.html(tree_html, height=700, scrolling=False)
 
 # ─── PANNEAU DE DÉTAIL ────────────────────────────────────────────────────────
@@ -531,7 +531,7 @@ st.markdown("---")
 col1, col2 = st.columns([1, 2])
 
 with col1:
-    st.markdown("### 👤 Fiche détaillée")
+    st.markdown("### Renseignement de la Personne")
     sorted_names_detail = sorted(PERSONS.items(), key=lambda x: x[1]["name"])
     options_detail = {v["name"]: k for k, v in sorted_names_detail}
     detail_name = st.selectbox(
