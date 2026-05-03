@@ -347,7 +347,7 @@ const ROWS=[
   {y:40+(ROW_H+ROW_GAP)*4, ids:[13,12]},
   {y:40+(ROW_H+ROW_GAP)*5, ids:[16,14,15]},
   {y:40+(ROW_H+ROW_GAP)*6, ids:[17,18,19,20]},
-  {y:40+(ROW_H+ROW_GAP)*7, ids:[24,25,26,27,28]},
+  {y:40+(ROW_H+ROW_GAP)*7, ids:[27,28, 24,25,26]},
 ];
 
 function measure(name){
