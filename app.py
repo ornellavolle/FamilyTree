@@ -46,12 +46,12 @@ PERSONS = {
     1:  {"name": "François Piponnier",       "birth": "",           "death": "28/01/1870", "place": "Simandre", "gender": "m"},
     2:  {"name": "Claudine Varnois",          "birth": "",           "death": "",           "place": "",         "gender": "f"},
     3:  {"name": "Jean Claude Piponnier",     "birth": "02/08/1847", "death": "",           "place": "Catheniére commune de Simandre", "gender": "m"},
-    4:  {"name": "Marie Catherine Laurent",   "birth": "05/03/1839", "death": "",           "place": "",         "gender": "f"},
-    5:  {"name": "Jean Claude Piponnier",     "birth": "09/07/1876", "death": "",           "place": "",         "gender": "m"},
+    4:  {"name": "Marie Catherine Laurent",   "birth": "05/03/1858", "death": "",           "place": "",         "gender": "f"},
+    5:  {"name": "Jean Claude Piponnier",     "birth": "02/08/1847", "death": "",           "place": "",         "gender": "m"},
     6:  {"name": "Louise Piponnier",          "birth": "10/04/1884", "death": "",           "place": "",         "gender": "f"},
     7:  {"name": "Marie Piponnier",           "birth": "10/10/1885", "death": "",           "place": "",         "gender": "f"},
-    8:  {"name": "Jean Marie Piponnier",      "birth": "30/10/1888", "death": "",           "place": "",         "gender": "m"},
-    9:  {"name": "Henriette Morin",           "birth": "",           "death": "",           "place": "",         "gender": "f"},
+    8:  {"name": "Jean Marie Piponnier",      "birth": "30/10/1887", "death": "25/03/1977", "place": "Cuisery, France",         "gender": "m"},
+    9:  {"name": "Henriette Morin",           "birth": "16/04/1891", "death": "",           "place": "",         "gender": "f"},
     10: {"name": "Francis Piponnier",         "birth": "30/08/1890", "death": "",           "place": "",         "gender": "m"},
     11: {"name": "Marguerite Piponnier",      "birth": "18/09/1895", "death": "",           "place": "",         "gender": "f"},
     12: {"name": "Hortense Piponnier",        "birth": "",           "death": "",           "place": "",         "gender": "f"},
@@ -71,6 +71,8 @@ PERSONS = {
     26 : {"name": "Ombeline Volle",             "birth": "30/09/2007",           "death": "", "place": "", "gender" : "f"},
     27 : {"name": "Benedict El raiani",             "birth": "",           "death": "", "place": "", "gender" : "m"},
     28 : {"name": "Éloise El raiani",             "birth": "",           "death": "", "place": "", "gender" : "f"},
+    29 : {"name": "Philibert Baconnet",             "birth": "",           "death": "", "place": "",    "gender" : "m"},
+    30 : {"name": "Anne Marie Baconnet né()",             "birth": "",           "death": "", "place": "",    "gender" : "f"},
 
 }
 
@@ -81,6 +83,7 @@ FILIATIONS = [
     (12,14),(13,14),(12,15),(13,15),
     (14,17),(16,17),(14,18),(16,18),(14,19),(16,19),
     (22,4), (23,4), (20,24), (19,24), (20,25), (19,25), (20,26), (19,26), (18,27), (18, 28) 
+    (29,9), (30,9), 
 ]
 
 UNIONS = {
@@ -342,7 +345,7 @@ const CW=7.5, PAD=18, HGAP=14, ROW_H=52, ROW_GAP=68;
 
 const ROWS=[
   {y:40+(ROW_H+ROW_GAP)*1, ids:[23,22,2,1]}, 
-  {y:40+(ROW_H+ROW_GAP)*2, ids:[4,3]},
+  {y:40+(ROW_H+ROW_GAP)*2, ids:[4,3,29,30]},
   {y:40+(ROW_H+ROW_GAP)*3, ids:[5,6,7,8,9,10,21,11]},
   {y:40+(ROW_H+ROW_GAP)*4, ids:[13,12]},
   {y:40+(ROW_H+ROW_GAP)*5, ids:[16,14,15]},
