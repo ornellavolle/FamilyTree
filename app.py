@@ -1,4 +1,13 @@
+"""
+Arbre Généalogique · Famille Piponnier
+Lancer avec : streamlit run arbre_genealogique_piponnier.py
+
+Dépendances : streamlit, anthropic
+Installation : pip install streamlit anthropic
+"""
+
 import streamlit as st
+import anthropic
 import json
 
 st.set_page_config(
@@ -30,33 +39,34 @@ h1 { font-family:'Playfair Display',serif!important; font-weight:400!important; 
 .rel-tag       { font-size:10px; color:#999; background:#F3F4F6; padding:1px 6px; border-radius:10px; }
 .story-btn     { width:100%; display:flex; align-items:center; gap:10px; padding:12px; border-radius:8px; border:1px solid #E8E5E0; background:#F9F9F9; cursor:pointer; margin-top:12px; }
 .story-icon    { width:34px; height:34px; border-radius:50%; background:#EFF6FF; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+.story-area    { background:#FAF8F5; border:1px solid #E8E5E0; border-radius:8px; padding:14px; margin-top:10px; font-size:13px; color:#444; line-height:1.8; }
 hr             { border:none; border-top:1px solid #EEE; margin:1rem 0; }
 </style>
 """, unsafe_allow_html=True)
 
 # ─── DONNÉES ──────────────────────────────────────────────────────────────────
 PERSONS = {
-    1:  {"name": "François Piponnier", "birth": "", "death": "28/01/1870", "place": "Simandre", "gender": "m"},
-    2:  {"name": "Claudine Varnois", "birth": "", "death": "", "place": "", "gender": "f"},
-    3:  {"name": "Jean Claude Piponnier", "birth": "03/08/1847", "death": "", "place": "Simandre", "gender": "m"},
-    4:  {"name": "Marie Catherine Laurent", "birth": "05/03/1839", "death": "", "place": "", "gender": "f"},
-    5:  {"name": "Jean Claude Piponnier", "birth": "09/07/1876", "death": "", "place": "", "gender": "m"},
-    6:  {"name": "Louise Piponnier", "birth": "10/04/1884", "death": "", "place": "", "gender": "f"},
-    7:  {"name": "Marie Piponnier", "birth": "10/10/1885", "death": "", "place": "", "gender": "f"},
-    8:  {"name": "Jean Marie Piponnier", "birth": "30/10/1888", "death": "", "place": "", "gender": "m"},
-    9:  {"name": "Henriette Morin", "birth": "", "death": "", "place": "", "gender": "f"},
-    10: {"name": "Francis Piponnier", "birth": "30/08/1890", "death": "", "place": "", "gender": "m"},
-    11: {"name": "Marguerite Piponnier", "birth": "18/09/1895", "death": "", "place": "", "gender": "f"},
-    12: {"name": "Hortense Piponnier", "birth": "", "death": "", "place": "", "gender": "f"},
-    13: {"name": "Francis Pourprix", "birth": "", "death": "", "place": "", "gender": "m"},
-    14: {"name": "Nicole Pourprix", "birth": "23/08/1943", "death": "", "place": "", "gender": "f"},
-    15: {"name": "Marie-France Pourprix", "birth": "", "death": "", "place": "", "gender": "f"},
-    16: {"name": "Mohamed El ralenti", "birth": "", "death": "", "place": "", "gender": "m"},
-    17: {"name": "Florence El ralenti", "birth": "", "death": "", "place": "", "gender": "f"},
-    18: {"name": "Natalie El ralenti", "birth": "", "death": "", "place": "", "gender": "f"},
-    19: {"name": "Barchive El ralenti", "birth": "02/05/1972", "death": "", "place": "", "gender": "f"},
-    20: {"name": "Régis Volle", "birth": "23/03/1977", "death": "", "place": "", "gender": "m"},
-    21: {"name": "Jeanne Marie DuBuisson", "birth": "", "death": "", "place": "", "gender": "f"},
+    1:  {"name": "François Piponnier",       "birth": "",           "death": "28/01/1870", "place": "Simandre", "gender": "m"},
+    2:  {"name": "Claudine Varnois",          "birth": "",           "death": "",           "place": "",         "gender": "f"},
+    3:  {"name": "Jean Claude Piponnier",     "birth": "03/08/1847", "death": "",           "place": "Simandre", "gender": "m"},
+    4:  {"name": "Marie Catherine Laurent",   "birth": "05/03/1839", "death": "",           "place": "",         "gender": "f"},
+    5:  {"name": "Jean Claude Piponnier",     "birth": "09/07/1876", "death": "",           "place": "",         "gender": "m"},
+    6:  {"name": "Louise Piponnier",          "birth": "10/04/1884", "death": "",           "place": "",         "gender": "f"},
+    7:  {"name": "Marie Piponnier",           "birth": "10/10/1885", "death": "",           "place": "",         "gender": "f"},
+    8:  {"name": "Jean Marie Piponnier",      "birth": "30/10/1888", "death": "",           "place": "",         "gender": "m"},
+    9:  {"name": "Henriette Morin",           "birth": "",           "death": "",           "place": "",         "gender": "f"},
+    10: {"name": "Francis Piponnier",         "birth": "30/08/1890", "death": "",           "place": "",         "gender": "m"},
+    11: {"name": "Marguerite Piponnier",      "birth": "18/09/1895", "death": "",           "place": "",         "gender": "f"},
+    12: {"name": "Hortense Piponnier",        "birth": "",           "death": "",           "place": "",         "gender": "f"},
+    13: {"name": "Francis Pourprix",          "birth": "",           "death": "",           "place": "",         "gender": "m"},
+    14: {"name": "Nicole Pourprix",           "birth": "23/08/1943", "death": "",           "place": "",         "gender": "f"},
+    15: {"name": "Marie-France Pourprix",     "birth": "",           "death": "",           "place": "",         "gender": "f"},
+    16: {"name": "Mohamed El ralenti",        "birth": "",           "death": "",           "place": "",         "gender": "m"},
+    17: {"name": "Florence El ralenti",       "birth": "",           "death": "",           "place": "",         "gender": "f"},
+    18: {"name": "Natalie El ralenti",        "birth": "",           "death": "",           "place": "",         "gender": "f"},
+    19: {"name": "Barchive El ralenti",       "birth": "02/05/1972", "death": "",           "place": "",         "gender": "f"},
+    20: {"name": "Régis Volle",               "birth": "23/03/1977", "death": "",           "place": "",         "gender": "m"},
+    21: {"name": "Jeanne Marie DuBuisson",    "birth": "",           "death": "",           "place": "",         "gender": "f"},
 }
 
 FILIATIONS = [
@@ -68,70 +78,492 @@ FILIATIONS = [
 ]
 
 UNIONS = {
-    "1-2": {"a": 1, "b": 2, "date": ""},
-    "3-4": {"a": 3, "b": 4, "date": "ca. 1875"},
-    "8-9": {"a": 8, "b": 9, "date": ""},
+    "1-2":   {"a": 1,  "b": 2,  "date": ""},
+    "3-4":   {"a": 3,  "b": 4,  "date": "ca. 1875"},
+    "8-9":   {"a": 8,  "b": 9,  "date": ""},
     "10-21": {"a": 10, "b": 21, "date": ""},
     "12-13": {"a": 12, "b": 13, "date": ""},
     "14-16": {"a": 14, "b": 16, "date": "ca. 1970"},
     "19-20": {"a": 19, "b": 20, "date": "ca. 2000"},
 }
 
+# ─── POSITIONS (rangées sans chevauchement) ───────────────────────────────────
+# Chaque rangée est centrée et espacée automatiquement dans le JS embarqué.
+# Ces coordonnées SVG sont calculées dynamiquement côté client.
+
 ROLE_STYLES = {
-    "self": {"fill": "#FEF3C7", "stroke": "#D97706", "text": "#92400E"},
-    "parent": {"fill": "#DBEAFE", "stroke": "#3B82F6", "text": "#1E40AF"},
-    "grand-parent": {"fill": "#C7D7FD", "stroke": "#4F46E5", "text": "#312E81"},
+    "self":                 {"fill": "#FEF3C7", "stroke": "#D97706", "text": "#92400E"},
+    "parent":               {"fill": "#DBEAFE", "stroke": "#3B82F6", "text": "#1E40AF"},
+    "grand-parent":         {"fill": "#C7D7FD", "stroke": "#4F46E5", "text": "#312E81"},
     "arrière grand-parent": {"fill": "#B5C5FB", "stroke": "#3730A3", "text": "#1E1B4B"},
-    "conjoint(e)": {"fill": "#FCE7F3", "stroke": "#EC4899", "text": "#831843"},
-    "enfant": {"fill": "#D1FAE5", "stroke": "#10B981", "text": "#064E3B"},
-    "petit-enfant": {"fill": "#A7F3D0", "stroke": "#059669", "text": "#064E3B"},
-    "frère/sœur": {"fill": "#FFEDD5", "stroke": "#F97316", "text": "#7C2D12"},
-    "gendre/bru": {"fill": "#EDE9FE", "stroke": "#8B5CF6", "text": "#4C1D95"},
-    "neveu/nièce": {"fill": "#FEF3C7", "stroke": "#F59E0B", "text": "#78350F"},
-    "neutre": {"fill": "#F3F4F6", "stroke": "#9CA3AF", "text": "#374151"},
+    "conjoint(e)":          {"fill": "#FCE7F3", "stroke": "#EC4899", "text": "#831843"},
+    "enfant":               {"fill": "#D1FAE5", "stroke": "#10B981", "text": "#064E3B"},
+    "petit-enfant":         {"fill": "#A7F3D0", "stroke": "#059669", "text": "#064E3B"},
+    "frère/sœur":           {"fill": "#FFEDD5", "stroke": "#F97316", "text": "#7C2D12"},
+    "gendre/bru":           {"fill": "#EDE9FE", "stroke": "#8B5CF6", "text": "#4C1D95"},
+    "neveu/nièce":          {"fill": "#FEF3C7", "stroke": "#F59E0B", "text": "#78350F"},
+    "neutre":               {"fill": "#F3F4F6", "stroke": "#9CA3AF", "text": "#374151"},
 }
 
+LEGEND_ORDER = [
+    ("self",                 "Vous"),
+    ("conjoint(e)",          "Conjoint(e)"),
+    ("parent",               "Parent"),
+    ("grand-parent",         "Grand-parent"),
+    ("arrière grand-parent", "Arrière grand-parent"),
+    ("frère/sœur",           "Frère / Sœur"),
+    ("enfant",               "Enfant"),
+    ("petit-enfant",         "Petit-enfant"),
+    ("gendre/bru",           "Gendre / Bru"),
+    ("neveu/nièce",          "Neveu / Nièce"),
+]
+
+# ─── LOGIQUE RELATIONS ────────────────────────────────────────────────────────
 def get_relations(pid: int) -> dict:
     roles = {pid: "self"}
     parents = [p for p, c in FILIATIONS if c == pid]
     for p in parents:
         roles[p] = "parent"
+        for gp, gc in FILIATIONS:
+            if gc == p:
+                roles[gp] = "grand-parent"
+                for ggp, ggc in FILIATIONS:
+                    if ggc == gp:
+                        roles[ggp] = "arrière grand-parent"
+    for u in UNIONS.values():
+        if u["a"] == pid: roles.setdefault(u["b"], "conjoint(e)")
+        if u["b"] == pid: roles.setdefault(u["a"], "conjoint(e)")
+    children = [c for p, c in FILIATIONS if p == pid]
+    for c in children:
+        roles[c] = "enfant"
+        for p2, c2 in FILIATIONS:
+            if p2 == c: roles[c2] = "petit-enfant"
+    siblings = {c2 for p in parents for p2, c2 in FILIATIONS if p2 == p and c2 != pid}
+    for s in siblings:
+        roles.setdefault(s, "frère/sœur")
+    for c in children:
+        for u in UNIONS.values():
+            if u["a"] == c: roles.setdefault(u["b"], "gendre/bru")
+            if u["b"] == c: roles.setdefault(u["a"], "gendre/bru")
+    for p in parents:
+        for u in UNIONS.values():
+            if u["a"] == p: roles.setdefault(u["b"], "parent")
+            if u["b"] == p: roles.setdefault(u["a"], "parent")
+    for s in siblings:
+        for p2, c2 in FILIATIONS:
+            if p2 == s: roles.setdefault(c2, "neveu/nièce")
     return roles
 
+
+def get_union_key(a: int, b: int):
+    for k, u in UNIONS.items():
+        if (u["a"] == a and u["b"] == b) or (u["a"] == b and u["b"] == a):
+            return k
+    return None
+
+
+def build_context(pid: int) -> str:
+    info = PERSONS[pid]
+    parents  = [PERSONS[p]["name"] for p, c in FILIATIONS if c == pid]
+    children = [PERSONS[c]["name"] for p, c in FILIATIONS if p == pid]
+    spouses  = []
+    for u in UNIONS.values():
+        if u["a"] == pid:
+            spouses.append({"name": PERSONS[u["b"]]["name"], "date": u["date"]})
+        elif u["b"] == pid:
+            spouses.append({"name": PERSONS[u["a"]]["name"], "date": u["date"]})
+    parent_ids = [p for p, c in FILIATIONS if c == pid]
+    siblings = [
+        PERSONS[c]["name"]
+        for par in parent_ids
+        for p2, c in FILIATIONS
+        if p2 == par and c != pid
+    ]
+    ctx = f"Nom : {info['name']}\nGenre : {'Homme' if info['gender']=='m' else 'Femme'}"
+    if info["birth"]: ctx += f"\nNaissance : {info['birth']}"
+    if info["death"]: ctx += f"\nDécès : {info['death']}"
+    if info["place"]: ctx += f"\nLieu : {info['place']}"
+    if parents:  ctx += f"\nParents : {' et '.join(parents)}"
+    if spouses:
+        sp_str = ", ".join(
+            s["name"] + (f" (mariage {s['date']})" if s["date"] else "")
+            for s in spouses
+        )
+        ctx += f"\nConjoint(e)(s) : {sp_str}"
+    if siblings:  ctx += f"\nFrères/sœurs : {', '.join(siblings)}"
+    if children:  ctx += f"\nEnfants : {', '.join(children)}"
+    return ctx
+
+
+def generate_story(pid: int) -> str:
+    ctx = build_context(pid)
+    prompt = (
+        "Tu es un généalogiste conteur. À partir de ces informations sur un membre "
+        "de la famille Piponnier, rédige un récit de vie court, chaleureux et plausible "
+        "en français (3-4 paragraphes, 3e personne). Invente des détails vraisemblables "
+        "selon l'époque et les liens familiaux. Ne mentionne pas que tu inventes.\n\n"
+        f"{ctx}\n\nRécit de vie :"
+    )
+    client = anthropic.Anthropic()
+    message = client.messages.create(
+        model="claude-opus-4-5",
+        max_tokens=1024,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    return message.content[0].text
+
+
+# ─── SESSION STATE ────────────────────────────────────────────────────────────
 if "chosen_id" not in st.session_state:
     st.session_state.chosen_id = 18
 if "view_all" not in st.session_state:
     st.session_state.view_all = False
+if "detail_id" not in st.session_state:
+    st.session_state.detail_id = None
+if "story" not in st.session_state:
+    st.session_state.story = {}
 
 # ─── SIDEBAR ──────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("## 🌳 Famille Piponnier")
+    st.markdown(
+        "<p style='font-size:12px;color:#AAA;margin-top:-10px;'>6 générations · 21 membres</p>",
+        unsafe_allow_html=True,
+    )
+    st.markdown("---")
 
-    if st.button("🌐 Voir tout l'arbre" if not st.session_state.view_all else "👤 Vue personnelle"):
+    # Voir tout / Vue personnelle
+    if st.button(
+        "🌐 Voir tout l'arbre" if not st.session_state.view_all else "👤 Vue personnelle",
+        use_container_width=True,
+    ):
         st.session_state.view_all = not st.session_state.view_all
         st.rerun()
 
+    st.markdown(
+        "<p style='font-size:11px;letter-spacing:1.5px;color:#888;text-transform:uppercase;'>Je suis…</p>",
+        unsafe_allow_html=True,
+    )
+
     sorted_names = sorted(PERSONS.items(), key=lambda x: x[1]["name"])
     options = {v["name"]: k for k, v in sorted_names}
-    chosen_name = st.selectbox("", list(options.keys()), label_visibility="collapsed")
-    st.session_state.chosen_id = options[chosen_name]
+    chosen_name = st.selectbox(
+        "",
+        list(options.keys()),
+        index=list(options.keys()).index(PERSONS[st.session_state.chosen_id]["name"]),
+        label_visibility="collapsed",
+    )
+    new_id = options[chosen_name]
+    if new_id != st.session_state.chosen_id:
+        st.session_state.chosen_id = new_id
+        st.session_state.view_all = False
+        st.rerun()
 
-# ─── ARBRE ────────────────────────────────────────────────────────────────────
+    chosen_id = st.session_state.chosen_id
+    st.markdown("---")
+
+    # Résumé des relations
+    roles = get_relations(chosen_id) if not st.session_state.view_all else {k: "neutre" for k in PERSONS}
+    if not st.session_state.view_all:
+        roles[chosen_id] = "self"
+
+    if st.session_state.view_all:
+        st.markdown(
+            "<div class='relation-box'>Tous les membres de la famille sont affichés.</div>",
+            unsafe_allow_html=True,
+        )
+    else:
+        first = PERSONS[chosen_id]["name"].split()[0]
+        counts = {}
+        for r in roles.values():
+            if r != "self":
+                counts[r] = counts.get(r, 0) + 1
+        lines = [f"<b>Vue de {first}</b><br>"]
+        for role, label in LEGEND_ORDER:
+            if role in counts:
+                n = counts[role]
+                lines.append(f"· {n} {label}")
+        st.markdown(
+            f"<div class='relation-box'>{'<br>'.join(lines)}</div>",
+            unsafe_allow_html=True,
+        )
+
+    st.markdown("---")
+
+    # Légende
+    st.markdown(
+        "<p style='font-size:11px;letter-spacing:1.5px;color:#888;text-transform:uppercase;'>Légende</p>",
+        unsafe_allow_html=True,
+    )
+    for role, label in LEGEND_ORDER:
+        st2 = ROLE_STYLES[role]
+        st.markdown(
+            f"<span class='legend-dot' style='background:{st2['fill']};border:2px solid {st2['stroke']};'></span>"
+            f"<span style='font-size:12px;color:#444;'>{label}</span>",
+            unsafe_allow_html=True,
+        )
+
+# ─── ARBRE (HTML+JS embarqué) ─────────────────────────────────────────────────
+persons_json  = json.dumps(PERSONS)
+filiations_json = json.dumps(FILIATIONS)
+unions_json   = json.dumps(UNIONS)
+styles_json   = json.dumps(ROLE_STYLES)
+selected_id   = chosen_id
+view_all_js   = "true" if st.session_state.view_all else "false"
+
+tree_html = f"""
+<style>
+*{{box-sizing:border-box;margin:0;padding:0;}}
+#wrap{{width:100%;height:680px;background:#FAF8F5;border-radius:10px;border:1px solid #E8E5E0;overflow:hidden;position:relative;}}
+#tree-svg{{width:100%;height:100%;cursor:grab;display:block;}}
+#tree-svg:active{{cursor:grabbing;}}
+.ng{{cursor:pointer;}}
+.ng:hover .nr{{opacity:.82;}}
+#tt{{position:absolute;background:#fff;border:1px solid #DDD;border-radius:8px;padding:8px 10px;font-size:12px;font-family:Inter,sans-serif;pointer-events:none;opacity:0;transition:opacity .15s;max-width:210px;z-index:5;}}
+#tt.show{{opacity:1;}}
+#tt strong{{font-weight:600;display:block;margin-bottom:3px;color:#222;}}
+#tt span{{color:#666;font-size:11px;display:block;line-height:1.6;}}
+</style>
+<div id="wrap">
+  <svg id="tree-svg" viewBox="0 0 1300 680" preserveAspectRatio="xMidYMid meet">
+    <g id="LL"></g>
+    <g id="NL"></g>
+  </svg>
+  <div id="tt"></div>
+</div>
+<script>
+const P={json.dumps(PERSONS)};
+const FILIATIONS={json.dumps([[p,c] for p,c in FILIATIONS])};
+const UNIONS={json.dumps({{k:{{"a":v["a"],"b":v["b"],"date":v["date"]}} for k,v in UNIONS.items()}})};
+const ROLE_STYLES={json.dumps(ROLE_STYLES)};
+const SEL_ID={selected_id};
+const VIEW_ALL={view_all_js};
+
+const CW=7.5,PAD=18,HGAP=14,ROW_H=52,ROW_GAP=68;
+
+const ROWS=[
+  {{y:40, ids:[2,1]}},
+  {{y:40+ROW_H+ROW_GAP, ids:[4,3]}},
+  {{y:40+(ROW_H+ROW_GAP)*2, ids:[5,6,7,8,9,10,11,21]}},
+  {{y:40+(ROW_H+ROW_GAP)*3, ids:[13,12]}},
+  {{y:40+(ROW_H+ROW_GAP)*4, ids:[16,14,15]}},
+  {{y:40+(ROW_H+ROW_GAP)*5, ids:[17,18,19,20]}},
+];
+
+function measure(name){{
+  const words=name.split(' ');
+  if(words.length<=2)return{{lines:[name],w:Math.max(name.length*CW+PAD*2,72),h:34}};
+  const h=Math.ceil(words.length/2);
+  const l1=words.slice(0,h).join(' '),l2=words.slice(h).join(' ');
+  return{{lines:[l1,l2],w:Math.max(Math.max(l1.length,l2.length)*CW+PAD*2,72),h:46}};
+}}
+
+function layoutRow(ids){{
+  const ms=ids.map(id=>measure(P[id].name));
+  const total=ms.reduce((s,m)=>s+m.w,0)+(ids.length-1)*HGAP;
+  let cx=(1300-total)/2;
+  const pos={{}};
+  ids.forEach((id,i)=>{{pos[id]={{x:cx+ms[i].w/2,m:ms[i]}};cx+=ms[i].w+HGAP;}});
+  return pos;
+}}
+
+const COORDS={{}};
+ROWS.forEach(row=>{{
+  const pos=layoutRow(row.ids);
+  row.ids.forEach(id=>{{COORDS[id]={{x:pos[id].x,y:row.y+pos[id].m.h/2,m:pos[id].m}}}});
+}});
+
+function getRels(pid){{
+  const roles={{[pid]:"self"}};
+  const parents=FILIATIONS.filter(([p,c])=>c===pid).map(([p])=>p);
+  parents.forEach(p=>{{
+    roles[p]="parent";
+    FILIATIONS.filter(([gp,gc])=>gc===p).forEach(([gp])=>{{
+      roles[gp]="grand-parent";
+      FILIATIONS.filter(([ggp,ggc])=>ggc===gp).forEach(([ggp])=>{{roles[ggp]="arrière grand-parent";}});
+    }});
+  }});
+  Object.values(UNIONS).forEach(u=>{{
+    if(u.a===pid)roles[u.b]=roles[u.b]||"conjoint(e)";
+    if(u.b===pid)roles[u.a]=roles[u.a]||"conjoint(e)";
+  }});
+  const children=FILIATIONS.filter(([p])=>p===pid).map(([,c])=>c);
+  children.forEach(c=>{{
+    roles[c]="enfant";
+    FILIATIONS.filter(([p2])=>p2===c).forEach(([,c2])=>{{roles[c2]="petit-enfant";}});
+  }});
+  const siblings=new Set(parents.flatMap(par=>FILIATIONS.filter(([p])=>p===par).map(([,c])=>c).filter(c=>c!==pid)));
+  siblings.forEach(s=>{{roles[s]=roles[s]||"frère/sœur";}});
+  children.forEach(c=>{{Object.values(UNIONS).forEach(u=>{{if(u.a===c)roles[u.b]=roles[u.b]||"gendre/bru";if(u.b===c)roles[u.a]=roles[u.a]||"gendre/bru";}});}});
+  parents.forEach(p=>{{Object.values(UNIONS).forEach(u=>{{if(u.a===p)roles[u.b]=roles[u.b]||"parent";if(u.b===p)roles[u.a]=roles[u.a]||"parent";}});}});
+  siblings.forEach(s=>{{FILIATIONS.filter(([p2])=>p2===s).forEach(([,c2])=>{{roles[c2]=roles[c2]||"neveu/nièce";}});}});
+  return roles;
+}}
+
+const curRoles=VIEW_ALL?Object.fromEntries(Object.keys(P).map(k=>[k,"neutre"])):getRels(SEL_ID);
+if(!VIEW_ALL)curRoles[SEL_ID]="self";
+
+function mkEl(tag){{return document.createElementNS('http://www.w3.org/2000/svg',tag);}}
+
+const LL=document.getElementById('LL'),NL=document.getElementById('NL');
+const vis=new Set(Object.keys(curRoles).map(Number));
+
+Object.values(UNIONS).forEach(u=>{{
+  if(!vis.has(u.a)||!vis.has(u.b))return;
+  const A=COORDS[u.a],B=COORDS[u.b];
+  const line=mkEl('line');
+  line.setAttribute('x1',A.x);line.setAttribute('y1',A.y);line.setAttribute('x2',B.x);line.setAttribute('y2',B.y);
+  line.setAttribute('stroke','#CCCCCC');line.setAttribute('stroke-width','1.5');line.setAttribute('stroke-dasharray','4 3');
+  LL.appendChild(line);
+  if(u.date){{
+    const tx=(A.x+B.x)/2,ty=(A.y+B.y)/2;
+    const bg=mkEl('rect');bg.setAttribute('x',tx-26);bg.setAttribute('y',ty-9);bg.setAttribute('width',52);bg.setAttribute('height',14);bg.setAttribute('rx',3);bg.setAttribute('fill','#FAF8F5');LL.appendChild(bg);
+    const dt=mkEl('text');dt.setAttribute('x',tx);dt.setAttribute('y',ty+1);dt.setAttribute('text-anchor','middle');dt.setAttribute('font-size','9');dt.setAttribute('fill','#AAA');dt.setAttribute('font-family','Inter,sans-serif');dt.textContent=u.date;LL.appendChild(dt);
+  }}
+}});
+
+FILIATIONS.forEach(([pp,c])=>{{
+  if(!vis.has(pp)||!vis.has(c))return;
+  const A=COORDS[pp],B=COORDS[c];
+  const my=(A.y+B.y)/2;
+  const path=mkEl('path');
+  path.setAttribute('d',`M${{A.x}},${{A.y}} L${{A.x}},${{my}} L${{B.x}},${{my}} L${{B.x}},${{B.y}}`);
+  path.setAttribute('fill','none');path.setAttribute('stroke','#DDD');path.setAttribute('stroke-width','1');
+  LL.appendChild(path);
+}});
+
+vis.forEach(pid=>{{
+  const info=P[pid],role=curRoles[pid]||"neutre",st=ROLE_STYLES[role]||ROLE_STYLES["neutre"];
+  const C=COORDS[pid];if(!C)return;
+  const m=C.m,nw=m.w,nh=m.h,nx=C.x-nw/2,ny=C.y-nh/2;
+  const g=mkEl('g');g.setAttribute('class','ng');
+  const rect=mkEl('rect');rect.setAttribute('class','nr');
+  rect.setAttribute('x',nx);rect.setAttribute('y',ny);rect.setAttribute('width',nw);rect.setAttribute('height',nh);
+  rect.setAttribute('rx',7);rect.setAttribute('fill',st.fill);rect.setAttribute('stroke',st.stroke);rect.setAttribute('stroke-width','1.5');
+  g.appendChild(rect);
+  if(m.lines.length===1){{
+    const t=mkEl('text');t.setAttribute('x',C.x);t.setAttribute('y',C.y);t.setAttribute('text-anchor','middle');t.setAttribute('dominant-baseline','central');t.setAttribute('font-size','11');t.setAttribute('fill',st.text);t.setAttribute('font-family','Inter,sans-serif');t.setAttribute('font-weight','500');t.textContent=m.lines[0];g.appendChild(t);
+  }}else{{
+    m.lines.forEach((ln,i)=>{{
+      const t=mkEl('text');t.setAttribute('x',C.x);t.setAttribute('y',ny+(i===0?13:29));t.setAttribute('text-anchor','middle');t.setAttribute('dominant-baseline','central');t.setAttribute('font-size','11');t.setAttribute('fill',st.text);t.setAttribute('font-family','Inter,sans-serif');t.setAttribute('font-weight','500');t.textContent=ln;g.appendChild(t);
+    }});
+  }}
+  const icon=mkEl('text');icon.setAttribute('x',nx+nw-4);icon.setAttribute('y',ny+4);icon.setAttribute('text-anchor','end');icon.setAttribute('dominant-baseline','hanging');icon.setAttribute('font-size','10');icon.setAttribute('fill',st.stroke);icon.setAttribute('font-family','Inter,sans-serif');icon.textContent=info.gender==='m'?'♂':'♀';g.appendChild(icon);
+  if(role==='self'){{const star=mkEl('text');star.setAttribute('x',nx+4);star.setAttribute('y',ny+3);star.setAttribute('dominant-baseline','hanging');star.setAttribute('font-size','10');star.setAttribute('fill',st.stroke);star.textContent='★';g.appendChild(star);}}
+  g.addEventListener('mouseenter',e=>showTT(e,pid));
+  g.addEventListener('mousemove',e=>moveTT(e));
+  g.addEventListener('mouseleave',hideTT);
+  NL.appendChild(g);
+}});
+
+function showTT(e,pid){{
+  const info=P[pid],role=curRoles[pid]||"",tip=document.getElementById('tt');
+  let html=`<strong>${{info.name}}</strong>`;
+  if(role&&role!=='neutre')html+=`<span>${{role.charAt(0).toUpperCase()+role.slice(1)}}</span>`;
+  html+=`<span>${{info.gender==='m'?'Homme':'Femme'}}</span>`;
+  if(info.birth)html+=`<span>Né(e) : ${{info.birth}}</span>`;
+  if(info.death)html+=`<span>Décédé(e) : ${{info.death}}</span>`;
+  if(info.place)html+=`<span>Lieu : ${{info.place}}</span>`;
+  tip.innerHTML=html;tip.classList.add('show');moveTT(e);
+}}
+function moveTT(e){{
+  const r=document.getElementById('wrap').getBoundingClientRect(),tip=document.getElementById('tt');
+  let x=e.clientX-r.left+12,y=e.clientY-r.top-10;
+  if(x+215>r.width)x=e.clientX-r.left-215;
+  tip.style.left=x+'px';tip.style.top=y+'px';
+}}
+function hideTT(){{document.getElementById('tt').classList.remove('show');}}
+
+let isDrag=false,ds={{x:0,y:0}},vo={{x:0,y:0}},dOrig={{x:0,y:0}};
+const svg=document.getElementById('tree-svg');
+svg.addEventListener('mousedown',e=>{{if(e.target.closest('.ng'))return;isDrag=true;ds={{x:e.clientX,y:e.clientY}};dOrig={{...vo}};}});
+window.addEventListener('mousemove',e=>{{if(!isDrag)return;vo.x=dOrig.x+(e.clientX-ds.x);vo.y=dOrig.y+(e.clientY-ds.y);NL.setAttribute('transform',`translate(${{vo.x}},${{vo.y}})`);LL.setAttribute('transform',`translate(${{vo.x}},${{vo.y}})`);}}); 
+window.addEventListener('mouseup',()=>isDrag=false);
+</script>
+"""
+
 st.markdown("# 🌳 Arbre Généalogique · Famille Piponnier")
+st.components.v1.html(tree_html, height=700, scrolling=False)
 
-st.info("Partie arbre conservée (inchangée dans cette version simplifiée).")
-
-# ─── PANNEAU DÉTAIL ───────────────────────────────────────────────────────────
+# ─── PANNEAU DE DÉTAIL ────────────────────────────────────────────────────────
 st.markdown("---")
-st.markdown("### 👤 Fiche détaillée")
+col1, col2 = st.columns([1, 2])
 
-detail_id = st.session_state.chosen_id
-info = PERSONS[detail_id]
+with col1:
+    st.markdown("### 👤 Fiche détaillée")
+    sorted_names_detail = sorted(PERSONS.items(), key=lambda x: x[1]["name"])
+    options_detail = {v["name"]: k for k, v in sorted_names_detail}
+    detail_name = st.selectbox(
+        "Sélectionner une personne",
+        list(options_detail.keys()),
+        index=list(options_detail.keys()).index(PERSONS[chosen_id]["name"]),
+        key="detail_select",
+    )
+    detail_id = options_detail[detail_name]
+    info = PERSONS[detail_id]
+    role = get_relations(chosen_id).get(detail_id, "neutre") if not st.session_state.view_all else "neutre"
+    st2 = ROLE_STYLES.get(role, ROLE_STYLES["neutre"])
+    initials = "".join(n[0] for n in info["name"].split()[:2])
 
-st.markdown(f"""
-**{info["name"]}**
+    st.markdown(
+        f"""<div class='detail-card'>
+        <div class='detail-avatar' style='background:{st2["fill"]};border:2px solid {st2["stroke"]};color:{st2["stroke"]}'>{initials}</div>
+        <div class='detail-name'>{info["name"]}</div>
+        <div class='detail-role'>{role.capitalize() if role!='neutre' else ''} · {'Homme' if info['gender']=='m' else 'Femme'}</div>
+        {"<div class='detail-row'><span class='detail-label'>Naissance</span><span>"+info['birth']+"</span></div>" if info['birth'] else ''}
+        {"<div class='detail-row'><span class='detail-label'>Décès</span><span>"+info['death']+"</span></div>" if info['death'] else ''}
+        {"<div class='detail-row'><span class='detail-label'>Lieu</span><span>"+info['place']+"</span></div>" if info['place'] else ''}
+        </div>""",
+        unsafe_allow_html=True,
+    )
 
-- Naissance : {info["birth"]}
-- Décès : {info["death"]}
-- Lieu : {info["place"]}
-""")
+    # Relations
+    parents_ids  = [p for p, c in FILIATIONS if c == detail_id]
+    children_ids = [c for p, c in FILIATIONS if p == detail_id]
+    spouses_ids  = [u["b"] if u["a"]==detail_id else u["a"] for u in UNIONS.values() if u["a"]==detail_id or u["b"]==detail_id]
+    sibling_ids  = {c for par in parents_ids for p2, c in FILIATIONS if p2 == par and c != detail_id}
+
+    def rel_section(title, ids, tag):
+        if not ids: return ""
+        lines = f"<div class='detail-sect'>{title}</div>"
+        for sid in ids:
+            lines += f"<div><span class='rel-tag'>{tag}</span> <span style='font-size:12px;color:#3B82F6'>{PERSONS[sid]['name']}</span></div>"
+        return lines
+
+    marriage_html = ""
+    for sp in spouses_ids:
+        uk = get_union_key(detail_id, sp)
+        if uk and UNIONS[uk]["date"]:
+            marriage_html += f"<div class='detail-row'><span class='detail-label'>Mariage</span><span>{UNIONS[uk]['date']}</span></div>"
+
+    rel_html = marriage_html
+    rel_html += rel_section("Conjoint(e)", spouses_ids, "conjoint")
+    rel_html += rel_section("Parents", parents_ids, "parent")
+    rel_html += rel_section("Frères & sœurs", list(sibling_ids), "fratrie")
+    rel_html += rel_section("Enfants", children_ids, "enfant")
+
+    if rel_html:
+        st.markdown(f"<div class='detail-card'>{rel_html}</div>", unsafe_allow_html=True)
+
+    # Bouton récit de vie
+    st.markdown("---")
+    if st.button("✍️ Générer le récit de vie", use_container_width=True, key="story_btn"):
+        with st.spinner("Génération du récit en cours…"):
+            story_text = generate_story(detail_id)
+            st.session_state.story[detail_id] = story_text
+
+with col2:
+    st.markdown("### 📖 Récit de vie")
+    if detail_id in st.session_state.story:
+        paragraphs = st.session_state.story[detail_id].strip().split("\n")
+        story_html = "".join(
+            f"<p style='margin-bottom:10px'>{p}</p>" for p in paragraphs if p.strip()
+        )
+        st.markdown(f"<div class='story-area'>{story_html}</div>", unsafe_allow_html=True)
+    else:
+        st.markdown(
+            "<div class='story-area' style='color:#AAA;font-style:italic'>"
+            "Cliquez sur « Générer le récit de vie » pour créer l'histoire de cette personne."
+            "</div>",
+            unsafe_allow_html=True,
+        )
