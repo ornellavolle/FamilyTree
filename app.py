@@ -354,7 +354,7 @@ const ROLE_STYLES = {styles_json};
 const SEL_ID = {chosen_id};
 const VIEW_ALL = {view_all_js};
 """ + """
-const CW=7.5, PAD=18, HGAP=14, ROW_H=52, ROW_GAP=68;
+const CW=7.5, PAD=18, HGAP=30, ROW_H=52, ROW_GAP=80;
 
 const ROWS=[
   {y:40+(ROW_H+ROW_GAP)*1, ids:[23,22,2,1]}, 
