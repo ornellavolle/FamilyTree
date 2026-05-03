@@ -69,7 +69,7 @@ PERSONS = {
 }
 
 FILIATIONS = [
-    (1,3),(2,3),(22,4), (23,4),
+    (1,3),(2,3),(22,4), (23,4), 
     (3,5),(4,5),(3,6),(4,6),(3,7),(4,7),(3,8),(4,8),(3,10),(4,10),(3,11),(4,11),
     (8,12),(9,12),
     (12,14),(13,14),(12,15),(13,15),
@@ -334,12 +334,13 @@ const VIEW_ALL = {view_all_js};
 const CW=7.5, PAD=18, HGAP=14, ROW_H=52, ROW_GAP=68;
 
 const ROWS=[
-  {y:40,          ids:[2,1]},
-  {y:40+ROW_H+ROW_GAP,         ids:[4,3]},
-  {y:40+(ROW_H+ROW_GAP)*2,     ids:[5,6,7,8,9,10,11,21]},
-  {y:40+(ROW_H+ROW_GAP)*3,     ids:[13,12]},
-  {y:40+(ROW_H+ROW_GAP)*4,     ids:[16,14,15]},
-  {y:40+(ROW_H+ROW_GAP)*5,     ids:[17,18,19,20]},
+  {y:40, ids:[23,22]}, 
+  {y:40+ROW_H+ROW_GAP, ids:[2,1]},
+  {y:40+(ROW_H+ROW_GAP)*2, ids:[4,3]},
+  {y:40+(ROW_H+ROW_GAP)*3, ids:[5,6,7,8,9,10,11,21]},
+  {y:40+(ROW_H+ROW_GAP)*4, ids:[13,12]},
+  {y:40+(ROW_H+ROW_GAP)*5, ids:[16,14,15]},
+  {y:40+(ROW_H+ROW_GAP)*6, ids:[17,18,19,20]},
 ];
 
 function measure(name){
