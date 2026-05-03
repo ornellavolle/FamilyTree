@@ -86,10 +86,8 @@ PERSONS = {
     41 : {"name": "Marie Claudine Laurent",             "birth": "01/07/1869",           "death": "", "place": "",    "gender"    : "f"},
     42: {"name": "Claude-Marie Laurent",     "birth": "1852", "death": " après 1911", "place": "", "gender": "m"},
     43: {"name": "Pierre Laurent",           "birth": "1855", "death": "1877", "place": "", "gender": "m"},
-    44:  {"name": "Marie-Catherine Laurent",  "birth": "1858", "death": "après 1911", "place": "", "gender": "f"},
     45: {"name": "Jean Laurent",             "birth": "1863", "death": "1863", "place": "", "gender": "m"},
     46: {"name": "Jean Marie Laurent",       "birth": "1864", "death": "1867", "place": "", "gender": "m"},
-    47: {"name": "Marie-Claudine Laurent",   "birth": "1869", "death": "",      "place": "", "gender": "f"},
     48: {"name": "Jeanne-Marie Laurent",     "birth": "1872", "death": "1936", "place": "", "gender": "f"},
 }
 
@@ -103,7 +101,7 @@ FILIATIONS = [
     (19,24), (20,25), (19,25), (20,26), (19,26), (18,27), (18, 28),
     (29,9), (30,9), (17,34), (17,35),
     (36,39), (37,39), (36,40), (37,40),(36,20), (37,20),
-    (22,41), (23,41),(22,42), (23,42),(22,43), (23,43),(22,44), (23,44),(22,45), (23,45),(22,46), (23,46),(22,47), (23,47),(22,48), (23,48),
+    (22,41), (23,41),(22,42), (23,42),(22,43), (23,43),(22,45), (23,45),(22,46), (23,46),(22,48), (23,48),
 ]
 
 UNIONS = {
@@ -367,7 +365,7 @@ const CW=7.5, PAD=18, HGAP=50, ROW_H=52, ROW_GAP=80;
 
 const ROWS=[
   {y:40+(ROW_H+ROW_GAP)*1, ids:[23,22,2,1]}, 
-  {y:40+(ROW_H+ROW_GAP)*2, ids:[42,43,44,45,46,47,48,41, 4,3,  29,30]},
+  {y:40+(ROW_H+ROW_GAP)*2, ids:[42,43,45,46,48,41, 4,3,  29,30]},
   {y:40+(ROW_H+ROW_GAP)*3, ids:[5,6,7,31,32,33,10,21,11,8,9]},
   {y:40+(ROW_H+ROW_GAP)*4, ids:[13,12]},
   {y:40+(ROW_H+ROW_GAP)*5, ids:[16,14,15, 36, 37]},
