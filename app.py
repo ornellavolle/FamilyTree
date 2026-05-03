@@ -48,7 +48,7 @@ PERSONS = {
     3:  {"name": "Jean Claude Piponnier",     "birth": "02/08/1847", "death": "",           "place": "Catheniére commune de Simandre", "gender": "m"},
     4:  {"name": "Marie Catherine Laurent",   "birth": "05/03/1858", "death": "",           "place": "",         "gender": "f"},
     5:  {"name": "Jean Claude Piponnier",     "birth": "02/08/1847", "death": "",           "place": "",         "gender": "m"},
-    6:  {"name": "Louise Piponnier",          "birth": "10/04/1884", "death": "",           "place": "",         "gender": "f"},
+    6:  {"name": "Louise Piponnier",          "birth": "10/04/1884", "death": "après 1936",           "place": "Gigny-sur-Saône, 71219, Saône-et-Loire, Bourgogne, France",         "gender": "f"},
     7:  {"name": "Marie Piponnier",           "birth": "10/10/1885", "death": "",           "place": "",         "gender": "f"},
     8:  {"name": "Jean Marie Piponnier",      "birth": "30/10/1887", "death": "25/03/1977", "place": "Cuisery, France",         "gender": "m"},
     9:  {"name": "Henriette Morin",           "birth": "16/04/1891", "death": "",           "place": "",         "gender": "f"},
@@ -88,8 +88,12 @@ PERSONS = {
     43: {"name": "Pierre Laurent",           "birth": "1855", "death": "1877", "place": "", "gender": "m"},
     45: {"name": "Jean Laurent",             "birth": "1863", "death": "1863", "place": "", "gender": "m"},
     46: {"name": "Jean Marie Laurent",       "birth": "1864", "death": "1867", "place": "", "gender": "m"},
-    48: {"name": "Jeanne-Marie Laurent",     "birth": "1872", "death": "1936", "place": "", "gender": "f"},
-}
+    47 : {"name": "Marie Louise Laurent",      "birth": "1866", "death": "1867", "place": "","gender": "f"},
+    48 : {"name": "Philibert Antoine Frerot",      "birth": "", "death": "", "place": "", "gender": "m"},
+    49 : {"name": "Jeanne Mathilde Frerot",       "birth": "Née en 1906", "death": "après 1926", "place": "", "gender": "f"},
+    50 : {"name": "Henri Guerin",       "birth": "", "death": "", "place": "", "gender": "m"},
+    51 : {"name": "Jean Frerot",       "birth": "Né en 1900", "death": "", "place": "", "gender": "m"}
+}   
 
 FILIATIONS = [
     (1,3),(2,3),
@@ -102,6 +106,7 @@ FILIATIONS = [
     (29,9), (30,9), (17,34), (17,35),
     (36,39), (37,39), (36,40), (37,40),(36,20), (37,20),
     (22,41), (23,41),(22,42), (23,42),(22,43), (23,43),(22,45), (23,45),(22,46), (23,46),(22,48), (23,48),
+    (6,49), (48,49),
 ]
 
 UNIONS = {
@@ -114,6 +119,7 @@ UNIONS = {
     "19-20": {"a": 19, "b": 20, "date": "ca. 2000"},
     "22-23": {"a": 22, "b": 23, "date": "19/01/1852", "place": "Simandre, Saône-et-Loire, France"},
     "36-37": {"a": 36, "b": 37, "date": ""},
+    "6-48":   {"a": 6,  "b": 48, "date": "27 août 1904", "place": "Loisy, 71261, Saône-et-Loire, Bourgogne, France"},
 }
 
 ROLE_STYLES = {
@@ -366,7 +372,7 @@ const CW=7.5, PAD=18, HGAP=50, ROW_H=52, ROW_GAP=80;
 const ROWS=[
   {y:40+(ROW_H+ROW_GAP)*1, ids:[23,22,2,1]}, 
   {y:40+(ROW_H+ROW_GAP)*2, ids:[42,43,45,46,48,41, 4,3,  29,30]},
-  {y:40+(ROW_H+ROW_GAP)*3, ids:[5,6,7,31,32,33,10,21,11,8,9]},
+  {y:40+(ROW_H+ROW_GAP)*3, ids:[49, 5,6,48,7,31,32,33,10,21,11,8,9]},
   {y:40+(ROW_H+ROW_GAP)*4, ids:[13,12]},
   {y:40+(ROW_H+ROW_GAP)*5, ids:[16,14,15, 36, 37]},
   {y:40+(ROW_H+ROW_GAP)*6, ids:[17,18,19,20,39,40]},
