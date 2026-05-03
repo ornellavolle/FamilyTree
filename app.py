@@ -1,11 +1,3 @@
-"""
-Arbre Généalogique · Famille Piponnier
-Lancer avec : streamlit run arbre_genealogique_piponnier.py
-
-Dépendances : streamlit, anthropic
-Installation : pip install streamlit anthropic
-"""
-
 import streamlit as st
 import anthropic
 import json
@@ -196,21 +188,19 @@ def build_context(pid: int) -> str:
 
 
 def generate_story(pid: int) -> str:
-    ctx = build_context(pid)
-    prompt = (
-        "Tu es un généalogiste conteur. À partir de ces informations sur un membre "
-        "de la famille Piponnier, rédige un récit de vie court, chaleureux et plausible "
-        "en français (3-4 paragraphes, 3e personne). Invente des détails vraisemblables "
-        "selon l'époque et les liens familiaux. Ne mentionne pas que tu inventes.\n\n"
-        f"{ctx}\n\nRécit de vie :"
-    )
-    client = anthropic.Anthropic()
-    message = client.messages.create(
-        model="claude-opus-4-5",
-        max_tokens=1024,
-        messages=[{"role": "user", "content": prompt}],
-    )
-    return message.content[0].text
+    info = PERSONS[pid]
+
+    name = info["name"]
+    birth = info["birth"] or "au XIXe siècle"
+    place = info["place"] or "dans sa région natale"
+
+    return f"""
+{name} est né(e) {birth} {place}. Issu(e) de la famille Piponnier, il/elle a grandi dans un environnement marqué par les traditions familiales et le travail.
+
+Au fil des années, {name.split()[0]} a construit sa vie entouré(e) de ses proches, contribuant à l’histoire familiale à sa manière. Les liens avec ses parents, ses frères et sœurs et ses enfants ont façonné son parcours.
+
+À travers les générations, son héritage s’inscrit dans une continuité familiale riche, transmise avec soin. Aujourd’hui encore, sa place dans l’arbre généalogique témoigne de son importance dans la lignée Piponnier.
+"""
 
 
 # ─── SESSION STATE ────────────────────────────────────────────────────────────
