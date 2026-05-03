@@ -52,7 +52,7 @@ PERSONS = {
     7:  {"name": "Marie Piponnier",           "birth": "10/10/1885", "death": "",           "place": "",         "gender": "f"},
     8:  {"name": "Jean Marie Piponnier",      "birth": "30/10/1887", "death": "25/03/1977", "place": "Cuisery, France",         "gender": "m"},
     9:  {"name": "Henriette Morin",           "birth": "16/04/1891", "death": "",           "place": "",         "gender": "f"},
-    10: {"name": "Francis Piponnier",         "birth": "30/08/1890", "death": "",           "place": "",         "gender": "m"},
+    10: {"name": "Francis Piponnier",         "birth": "30/08/1890", "death": "après 1936 ",           "place": "Simandre, 71522, Saône-et-Loire, Bourgogne, France",         "gender": "m"},
     11: {"name": "Marguerite Piponnier",      "birth": "18/09/1895", "death": "",           "place": "",         "gender": "f"},
     12: {"name": "Hortense Piponnier",        "birth": "",           "death": "",           "place": "",         "gender": "f"},
     13: {"name": "Francis Pourprix",          "birth": "",           "death": "",           "place": "",         "gender": "m"},
@@ -96,6 +96,18 @@ PERSONS = {
     52 : {"name": "René Piponnier",       "birth": "05/05/1920", "death": "03/01/2000", "place": "Millery, 69133, Rhône, Rhône-Alpes, France", "gender": "m"},
     53 : {"name": "Inconnu(e)",       "birth": "", "death": "", "place": "", "gender": ""},
     54 : {"name": "Inconnu(e)",       "birth": "", "death": "", "place": "", "gender": ""},
+    55: {"name": "Jean-François Menager", "birth": "", "death": "", "place": "", "gender": "m"},
+    56: {"name": "Francis Menager",       "birth": "1919", "death": "1931", "place": "", "gender": "m"},
+    
+    57: {"name": "Jean Joseph Menager",   "birth": "", "death": "", "place": "", "gender": "m"},
+
+    # enfants inconnus → placeholders
+    58: {"name": "Enfant Menager 1", "birth": "", "death": "", "place": "", "gender": "m"},
+    59: {"name": "Enfant Menager 2", "birth": "", "death": "", "place": "", "gender": "f"},
+    60: {"name": "Enfant Menager 3", "birth": "", "death": "", "place": "", "gender": "m"},
+    61: {"name": "Enfant Menager 4", "birth": "", "death": "", "place": "", "gender": "f"},
+    62: {"name": "Enfant Menager 5", "birth": "", "death": "", "place": "", "gender": "m"},
+
 }   
 
 FILIATIONS = [
@@ -110,6 +122,15 @@ FILIATIONS = [
     (36,39), (37,39), (36,40), (37,40),(36,20), (37,20),
     (22,41), (23,41),(22,42), (23,42),(22,43), (23,43),(22,45), (23,45),(22,46), (23,46),(22,48), (23,48),
     (6,49), (48,49), (10,52), (21,52),(10,53), (21,53),(10,54), (21,54),
+
+    (36,38), (37,38),
+
+    # 2e mariage
+    (36,40), (39,40),
+    (36,41), (39,41),
+    (36,42), (39,42),
+    (36,43), (39,43),
+    (36,44), (39,44),
 ]
 
 UNIONS = {
@@ -125,6 +146,8 @@ UNIONS = {
     "6-48":   {"a": 6,  "b": 48, "date": "27 août 1904", "place": "Loisy, 71261, Saône-et-Loire, Bourgogne, France"},
     "49-50":   {"a": 49,  "b": 50, "date": "entre 1921 et 1926", "place": "Gigny-sur-Saône, 71219, Saône-et-Loire, Bourgogne, France "},
     "7-51":   {"a": 7,  "b": 51, "date": "01/02/1906", "place": "Loisy, 71261, Saône-et-Loire, Bourgogne, France "},
+    "36-37": {"a": 36, "b": 37, "date": "16/04/1918"},
+    "36-39": {"a": 36, "b": 39, "date": "14/07/1926"},
 }
 
 ROLE_STYLES = {
@@ -375,12 +398,25 @@ const VIEW_ALL = {view_all_js};
 const CW=7.5, PAD=18, HGAP=50, ROW_H=52, ROW_GAP=80;
 
 const ROWS=[
+  // génération 1
   {y:40+(ROW_H+ROW_GAP)*1, ids:[23,22,2,1]}, 
-  {y:40+(ROW_H+ROW_GAP)*2, ids:[42,43,45,46,48,41, 4,3,  29,30]},
-  {y:40+(ROW_H+ROW_GAP)*3, ids:[5,6,48,7,51,31,32,33,10,21,11,8,9]},
-  {y:40+(ROW_H+ROW_GAP)*4, ids:[50,,49,13,12, 52,53,54]},
-  {y:40+(ROW_H+ROW_GAP)*5, ids:[16,14,15, 36, 37]},
-  {y:40+(ROW_H+ROW_GAP)*6, ids:[17,18,19,20,39,40]},
+
+  // génération 2 (parents de 3/4 + autres branches)
+  {y:40+(ROW_H+ROW_GAP)*2, ids:[29,30,4,3,42,43,45,46,48,41]},
+
+  // génération 3 (enfants principaux)
+  {y:40+(ROW_H+ROW_GAP)*3, ids:[5,6,7,8,10,21,11,9,31,32,33,51]},
+
+  // génération 4
+  {y:40+(ROW_H+ROW_GAP)*4, ids:[13,12,49,50,52,53,54]},
+
+  // génération 5 (Laurent + mariage)
+  {y:40+(ROW_H+ROW_GAP)*5, ids:[36,37,16,14,15]},
+
+  // génération 6 (MENAGER enfants)
+  {y:40+(ROW_H+ROW_GAP)*6, ids:[39,40,17,18,19,20]},
+
+  // génération 7
   {y:40+(ROW_H+ROW_GAP)*7, ids:[34,35,27,28,24,25,26]},
 ];
 
