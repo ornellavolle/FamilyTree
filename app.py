@@ -92,6 +92,7 @@ PERSONS = {
     48 : {"name": "Philibert Antoine Frerot",      "birth": "", "death": "", "place": "", "gender": "m"},
     49 : {"name": "Jeanne Mathilde Frerot",       "birth": "Née en 1906", "death": "après 1926", "place": "", "gender": "f"},
     50 : {"name": "Henri Guerin",       "birth": "", "death": "", "place": "", "gender": "m"},
+    51 : {"name": "Claude-Marie Boumont (ou Benoit)",       "birth": "", "death": "", "place": "", "gender": "m"},
 }   
 
 FILIATIONS = [
@@ -120,6 +121,7 @@ UNIONS = {
     "36-37": {"a": 36, "b": 37, "date": ""},
     "6-48":   {"a": 6,  "b": 48, "date": "27 août 1904", "place": "Loisy, 71261, Saône-et-Loire, Bourgogne, France"},
     "49-50":   {"a": 49,  "b": 50, "date": "entre 1921 et 1926", "place": "Gigny-sur-Saône, 71219, Saône-et-Loire, Bourgogne, France "},
+    "7-51":   {"a": 7,  "b": 51, "date": "01/02/1906", "place": "Loisy, 71261, Saône-et-Loire, Bourgogne, France "},
 }
 
 ROLE_STYLES = {
